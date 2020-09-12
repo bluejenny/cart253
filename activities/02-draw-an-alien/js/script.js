@@ -1,13 +1,13 @@
 /**************************************************
-Template p5 project
-Pippin Barr
+Activity 2: Draw an Alien
+Jennifer Poohachoffj
 
-Here is a description of this template p5 project.
+Draw an alien on the canvas.
 **************************************************/
 
 // setup()
 //
-// Description of setup() goes here.
+// Draws an Alien
 function setup() {
   createCanvas(640, 480);
 
@@ -40,7 +40,7 @@ function setup() {
 
 // draw()
 //
-// Description of draw() goes here.
+// draw nothing
 function draw() {
 
 }

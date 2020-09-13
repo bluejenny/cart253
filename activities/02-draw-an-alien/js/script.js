@@ -17,8 +17,8 @@ function setup() {
 
   //planet
   fill(288, 210, 248);
-  ellipse(320, 350, 600, 550);
-  filter(BLUR, 80);
+  ellipse(320, 300, 550, 550);
+  filter(BLUR, 20);
 
   //shadow
   fill(99, 44, 121);

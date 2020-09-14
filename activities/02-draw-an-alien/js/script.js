@@ -17,8 +17,17 @@ function setup() {
 
   //planet
   fill(288, 210, 248);
-  ellipse(320, 300, 550, 550);
-  filter(BLUR, 20);
+  ellipse(320, 400, 550, 550);
+  filter(BLUR, 10);
+
+  // fill(0, 164, 83);
+  // ellipse(90, 120, 125, 125);
+
+
+  //buildings
+  // fill(0);
+  // rect(30, 400, 55, 255);
+  // rect(100, 350, 85, 355);
 
   //shadow
   fill(99, 44, 121);
@@ -46,8 +55,6 @@ function setup() {
   ellipse(320, 305, 50, 50);
   ellipse(320, 315, 50, 60);
 
-
-
   //eyes
   //left
   fill(0);
@@ -61,13 +68,20 @@ function setup() {
   rotate(-26);
   ellipse(207, 363, 95, 50);
   rotate(26);
-  smooth();
+
+  // fill(255);
+  // ellipse(220, 210, 25, 25);
+  // ellipse(400, 210, 25, 25);
+  //
+  // fill(20);
+  // ellipse(220, 210, 22, 22);
+  // ellipse(400, 210, 22, 22);
 
   //rotate(25);
   //nostrils
   fill(0);
-  ellipse(315, 255, 5, 5);
-  ellipse(325, 255, 5, 5);
+  ellipse(315, 265, 5, 5);
+  ellipse(325, 265, 5, 5);
 
   //mouth
   stroke(200, 0, 0);

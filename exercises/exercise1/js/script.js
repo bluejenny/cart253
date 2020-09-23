@@ -18,15 +18,15 @@ let rect1 = {
 }
 
 let rect2 = {
-  x: 1000,
+  x: 0,
   y: 200,
   width: 100,
   height: 150,
-  speed: -3
+  speed: -4
 }
 
 let circ1 = {
-  x: 160,
+  x: 0,
   y: 0,
   fill: 0,
   size: 25,
@@ -34,26 +34,29 @@ let circ1 = {
   growth: .15
 }
 
-// setup()
+// make canvas fit to screen
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
+  //move rect2 to right of canvas
+  rect2.x = width;
+
 }
 
-// draw()
+// draw an exclamation point
 function draw() {
 
   //background color maps green and blue values to
-  //mouseX and mouseY, r gets larger as circle
-  //moves down screen
+  //mouseX and mouseY, r gets larger (colors get more saturated)
+  //as circle moves down screen
   background(bg.r, bg.g, bg.b);
   bg.r = map(circ1.y, 0, height, 0, 255);
   bg.g = map(mouseY, 0, width, 0, 255);
   bg.b = map(mouseX, 0, height, 0, 255);
   // bg.r = random(0, 255);
 
-  //position of circle always in middle
+  //reposition circle so always in middle
   circ1.x = width/2;
 
   //animation of rectangles

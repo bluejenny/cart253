@@ -11,18 +11,18 @@ let bg = {
 
 let rect1 = {
   x: 0,
-  y: 70,
+  y: 50,
   width: 100,
   height: 150,
-  speed: 5
+  speed: 6
 }
 
 let rect2 = {
   x: 1000,
-  y: 220,
+  y: 200,
   width: 100,
   height: 150,
-  speed: -2
+  speed: -3
 }
 
 let circ1 = {

@@ -48,7 +48,7 @@ function setup() {
 function draw() {
 
   //background color maps green and blue values to
-  //mouseX and mouseY, r gets larger (colors get more saturated)
+  //mouseX and mouseY, r gets larger (colors get more red value)
   //as circle moves down screen
   background(bg.r, bg.g, bg.b);
   bg.r = map(circ1.y, 0, height, 0, 255);

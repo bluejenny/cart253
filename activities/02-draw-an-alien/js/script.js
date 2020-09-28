@@ -12,7 +12,8 @@ function setup() {
   createCanvas(640, 480);
   background(186, 147, 202);
   noStroke();
-  angleMode(DEGREES)
+  angleMode(DEGREES);
+
 
   //planet
   squareColor = color(288, 210, 248);
@@ -22,13 +23,12 @@ function setup() {
 
   //shadow
   fill(99, 44, 121);
-  ellipse(317, 500, 150, 200);
-  ellipse(317, 400, 25, 200);
-  ellipse(317, 201, 300, 250);
-  ellipse(317, 231, 225, 200);
-  ellipse(317, 261, 150, 150);
-  ellipse(317, 291, 100, 100);
-  ellipse(317, 400, 30, 200);
+  // ellipse(337, 525, 175, 200);
+  ellipse(310, 202, 300, 230);
+  //ellipse(317, 231, 225, 200);
+  //ellipse(317, 261, 150, 150);
+  // ellipse(317, 291, 100, 100);
+  // ellipse(340, 400, 30, 200);
 
   filter(BLUR, 5);
 
@@ -98,9 +98,9 @@ function setup() {
 
 
   //body
-  fill(163, 148, 124);
+  fill(173, 158, 124);
   ellipse(320, 500, 150, 200);
-  ellipse(320, 400, 30, 200);
+  rect(320, 400, 24, 200);
 
   //head
   fill(181, 164, 138);
@@ -125,8 +125,8 @@ function setup() {
 
   //eyes white
   fill(255);
-  ellipse(220, 210, 25, 25);
-  ellipse(400, 211, 25, 25);
+  ellipse(220, 211, 25, 25);
+  ellipse(400, 212, 25, 25);
 
   //eyes pupil
   fill(0);

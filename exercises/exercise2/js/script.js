@@ -1,8 +1,6 @@
 /**************************************************
-Activity 4 : Dodging Covid
+Exercise 2: Dodge-em
 Jennifer Poohachoff
-
-Class Activity
 **************************************************/
 
 //variables

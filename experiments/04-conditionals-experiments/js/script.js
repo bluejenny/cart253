@@ -11,8 +11,13 @@ let circle = {
   x: 0,
   y: 0,
   fill: 124,
-  size: 100,
-  speed: 10
+  size: 75,
+  vx: 0,
+  vy: 0,
+  ax: 0,
+  ay: 0,
+  acceleration: 0.1,
+  maxSpeed: 5
 }
 let caterpillar = {
   x: 100,
@@ -24,13 +29,35 @@ let caterpillar = {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  circle.x = width/2;
+  circle.y = height/2;
 }
 
 function draw() {
   background(bg.r, bg.g, bg.b);
   noStroke();
-  circle.x = width/2;
-  circle.y = height/2;
+
+  if (mouseX < circle.x) {
+    circle.ax = -circle.acceleration;
+  }
+  else {
+    circle.ax = circle.acceleration;
+  }
+
+  if (mouseY < circle.y) {
+    circle.ay = -circle.acceleration;
+  }
+  else {
+    circle.ay = circle.acceleration;
+  }
+
+  circle.vx = circle.vx + circle.ax;
+  circle.vx = constrain(circle.vx, -circle.maxSpeed, circle.maxSpeed)
+  circle.vy = circle.vy + circle.ay;
+  circle.vy = constrain(circle.vy, -circle.maxSpeed, circle.maxSpeed)
+
+  circle.x = circle.x + circle.vx;
+  circle.y = circle.y + circle.vy;
 
   // circle.x = mouseX;
   // circle.y = mouseY;

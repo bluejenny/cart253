@@ -219,7 +219,7 @@ function draw() {
   push();
     fill(4, 124, 81);
 
-    translate(-150, 0);
+    translate(-150, -20);
     beginShape();
     vertex(300, 70);
     vertex(260, 150);

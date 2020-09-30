@@ -1,3 +1,6 @@
-# Template p5 project
+# Dodge 'em Exercise
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+Keep the clown happy!
+Try avoid the mosquitos if you can,
+by clicking the mouse the day moves towards night
+and the mosquitos get larger and faster

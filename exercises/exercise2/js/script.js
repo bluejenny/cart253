@@ -22,7 +22,7 @@ let circle = {
   ax: 0,
   ay: 0,
   acceleration: 0.25,
-  maxSpeed: 4
+  maxSpeed: 10
 }
 
 //circle for mosquito2
@@ -302,6 +302,9 @@ function mousePressed() {
   mosquitoSize += sizeIncrease;
   bg.g = bg.g - 20;
   bg.b = bg.b -10;
+  circle.maxSpeed += 1;
+  circle2.maxSpeed += .5;
+  circle3.maxSpeed += .5;
 }
 
 function windowResized() {

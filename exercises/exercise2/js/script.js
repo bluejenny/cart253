@@ -7,7 +7,7 @@ Mosquito image - Created by Edward Boatman, Noun Project
 Tree code - https://editor.p5js.org/creativecoding/sketches/GlTvrpxn5
 
 avoid the mosquito if you can, by clicking the mouse the day moves towards
-night and the mosquitos get larger
+night and the mosquitos get larger and faster
 **************************************************/
 
 //variables

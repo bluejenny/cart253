@@ -30,11 +30,14 @@ function draw() {
 
   move();
   wrap();
+  display();
+}
 
+function display() {
   fill(255, 0, 0);
   ellipse(circle.x, circle.y, circle.size);
-
 }
+
 
 function wrap() {
   if (circle.x > width) {

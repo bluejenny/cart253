@@ -1,60 +1,76 @@
 /**************************************************
-05 - Functions 2 - Text
+05 - States
 
 **************************************************/
-// let hamlet = "to be or not to be";
-//
-// let hamlet2 = 'that is the question';
-//
-// let hamlet3 = `whether it is nobler in the mind...`
 
-let hello = {
-  string: `Hello, world!`,
+let circle = {
   x: 0,
-  y: 0,
-  vx: 5,
-  vy: 1,
-  size: 64
+  y: 250,
+  size: 100,
+  vx: 0,
+  vy: 0,
+  speed: 2
 }
 
-// setup()
-//
-// Description of setup() goes here.
+let bg = 0;
+
+let state = `title`; // possible states are title, animation and ending
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
-
-  let hotCelsius = toCelsius(100);
-  console.log(`100 desgrees fahrenheit is ${hotCelsius} degrees celsius.`);
+  circle.vx = circle.speed;
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  circle.y = height/2;
 
 }
 
-// draw()
-//
-// Description of draw() goes here.
 function draw() {
-  background(0);
+  background(bg);
 
-  hello.x = hello.x + hello.vx;
-  hello.y = hello.y + hello.vy;
+  if (state === `title`) {
 
-  hello.size += 1;
+  // title
+  title();
+
+  }
+  else if (state === `animation`) {
+
+  // animation
+  circle.x += circle.vx;
+  circle.y += circle.vy;
+
+  if (circle.x > width) {
+    state = `ending`;
+  }
+  ellipse(circle.x, circle.y, 100);
+  }
+
+  else if (state === `ending`) {
+
+  // ending
+  fill(127);
+  text(`It's all over.`, width/2, height/2);
+  }
 
   textAlign(CENTER, CENTER);
-  textSize(hello.size);
-  fill(200, 50, 200);
-  text(hello.string, hello.x, hello.y);
-
-  let x = random(0, width);
-  let y = random(0, height);
-
-  ellipse(x, y, 100);
+  textSize(64);
+  fill(255);
+  text(key, width/2, height/2);
 
 }
 
-function toCelsius(f) {
-  let celsius = (f - 32) * 5/9;
-  return celsius;
+function title() {
+  fill(255);
+  text(`Life.`, width/2, height/2);
+}
+
+function keyPressed() {
+  if (state === `title`) {
+    state = `animation`;
+  }
+
 }
 
 

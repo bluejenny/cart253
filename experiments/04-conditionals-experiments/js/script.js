@@ -1,42 +1,62 @@
 /**************************************************
 conditionals
 **************************************************/
-let backgroundShade = 0;
-let bg = {
-  r: 0,
-  g: 0,
-  b: 0
-}
+// let backgroundShade = 0;
+// let bg = {
+//   r: 0,
+//   g: 0,
+//   b: 0
+// }
 let circle = {
   x: 0,
   y: 0,
   fill: 124,
-  size: 75,
+  size: 50,
   vx: 0,
   vy: 0,
   ax: 0,
   ay: 0,
   acceleration: 0.1,
-  maxSpeed: 5
-}
-let caterpillar = {
-  x: 100,
-  y: 250,
-  segmentSize: 50
+  maxSpeed: 5,
 }
 
-// let displayCircle = false;
+
+var points = []
+var i = 0
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  circle.x = width/2;
-  circle.y = height/2;
+  // circle.x = width/2;
+  // circle.y = height/2;
 }
 
 function draw() {
-  background(bg.r, bg.g, bg.b);
-  noStroke();
+  // background(bg.r, bg.g, bg.b);
+  // noStroke();
 
+  push();
+  // noFill()
+  translate(width/2, height/2)
+  // fill(`red`);
+  stroke(255)
+  strokeWeight(2)
+
+
+  beginShape()
+  points.forEach(point => {
+    vertex(point.x,point.y)
+  })
+  endShape()
+
+  i+= 0.01
+        var r = 5
+        var x = r * 16 * pow(sin(i), 3)
+        var y = - r * 1* (13 * cos(i) - 5 * cos(2*i) - 2*cos(3*i) - cos(4* i))
+        points.push({x, y})
+
+  pop();
+
+  // movement of circle around cursor
   if (mouseX < circle.x) {
     circle.ax = -circle.acceleration;
   }
@@ -50,6 +70,20 @@ function draw() {
   else {
     circle.ay = circle.acceleration;
   }
+
+  // To use noise we need to provide an argument to it
+  // that changes over time, circle.tx for our horizontal movement
+  // and circle.ty for our vertical movement. t is for "time" here.
+  circle.tx = circle.tx + 0.025;
+  circle.ty = circle.ty + 0.025;
+  // Changing the number we add to our "time" values changes the
+  // resulting "smoothness" of the movement.
+
+  // Now we calculate the noise value based on those "time" values
+  // Because they increase over time, noise() returns different values
+  // each frame.
+  let noiseX = noise(circle.tx);
+  let noiseY = noise(circle.ty);
 
   circle.vx = circle.vx + circle.ax;
   circle.vx = constrain(circle.vx, -circle.maxSpeed, circle.maxSpeed)

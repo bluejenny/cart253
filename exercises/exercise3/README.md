@@ -1,3 +1,5 @@
 # Template p5 project
 
-Excercise 3: Love Actually
+Excercise 3: Escape love
+
+Find or Escape Love!

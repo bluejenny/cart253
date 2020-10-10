@@ -41,6 +41,11 @@ let circle4 = {
 
 let snowflakes = [];
 
+let a;
+let b;
+// var rot = 0;
+// var speed = 0.01;
+
 // let num = 15;
 // let mx = [];
 // let my = [];
@@ -49,6 +54,10 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
   noCursor();
+  a = height /3 * 2;
+  b = height /3 * 2;
+
+  // max_distance = dist(0, 0, width, height);
 
   // push();
   // fill(255, 153);
@@ -60,18 +69,26 @@ function setup() {
 }
 
 function draw() {
-  background(bg.r, bg.g, bg.b);
+  background(48, 65, 79);
 
+  push();
+  let c = map(mouseY, 0, height, 255, 100);
+  fill(bg.r, bg.g, bg.b, c);
+
+  rect(0, 0, width, height);
+  pop();
   // draw lines
   stroke(245);
   strokeWeight(1);
   // stroke(random(225, 255));
   push();
   // ellipseMode(CENTER);
-  translate(mouseX + -width, mouseY + -height/2 - 580);
+    ellipseMode(CENTER);
+  translate(mouseX + -width/2, mouseY + -height/2-200);
+
   points 			= 16;					//number of points
   pointAngle 	= 360/points; //angle between points
-  radius 			= width; 		//length of each line from centre to edge of circle
+  radius 			= width/2; 		//length of each line from centre to edge of circle
 
   for (angle=270;angle<630;angle=angle+pointAngle){
   	x = cos(radians(angle)) * radius; //convert angle to radians for x and y coordinates
@@ -79,6 +96,36 @@ function draw() {
   	line(radius, radius, x+radius, y+radius); //draw a line from each point back to the centre
 	}
   pop();
+
+  // push();
+  // fill(207, 228, 245, mouseY);
+  // noStroke();
+  //
+  // for (let i = 0; i <= width; i += 20) {
+  //   for (let j = 0; j <= height; j += 20) {
+  //     let size = dist(mouseX, mouseY, i, j);
+  //     size = (size / max_distance) * 66;
+  //     ellipse(i, j, size, size);
+  //   }
+  // }
+  // pop();
+
+  // new lines
+  // line(0, height/2, width, height/2);
+  push();
+  // line(mouseX, 0, mouseX, height);
+  // line(0, mouseY, width, mouseY);
+  // line(0, 0, mouseX, mouseY)
+
+  pop();
+
+  //rotate a single line
+  // push();
+  //
+  // translate(width/2, height/2);
+  // rotate(rot+=speed);
+  // line(-mouseX, -mouseY, mouseX, mouseY);
+  // pop();
 
   push();
   //circle2.fill = random(235, 255);
@@ -107,22 +154,47 @@ function draw() {
   // fill(162, 180, 195);
   // fill(141, 158, 171);
   //fill(162, 180, 195);
+
+  fill(182, 203, 220, 200);
+  rect(0, 2*height/3, width, height/2);
+
   fill(157, 175, 190);
   triangle(mouseX-10, 2*height/3, 0, 350, 0, height);
   triangle(mouseX+10, 2*height/3, width, 350, width, height);
   //fill(39, 57, 44);
   stroke(235);
-  fill(182, 203, 220);
+  fill(182, 203, 220, 200);
   rect(0, 2*height/3, width, height/2);
-  rect(0, 2*height/3+5, width, height/2);
-  rect(0, 2*height/3+10, width, height/2);
-  rect(0, 2*height/3+20, width, height/2);
-  rect(0, 2*height/3+33, width, height/2);
+  // rect(0, 2*height/3+5, width, height/2);
+  // rect(0, 2*height/3+10, width, height/2);
+  // rect(0, 2*height/3+20, width, height/2);
+  // rect(0, 2*height/3+33, width, height/2);
   // rect(0, 2*height/3+55, width, height/2);
   // rect(0, 2*height/3+85, width, height/2);
   // rect(0, 2*height/3+125, width, height/2);
   // rect(0, 2*height/3+200, width, height/2)
   pop();
+
+  // moving line landscape
+  push();
+  stroke(200);
+  fill(0, 10);
+  rect(0, a, width, a);
+  a = a + .1;
+  if (a > height-100) {
+    a = height/3 *2;
+  }
+  pop();
+
+  // push();
+  //
+  // line(0, b, width, b);
+  // b = b + .2;
+  // if (b > height-20) {
+  //   b = height/3 *2;
+  // }
+  // pop();
+
 
   //draw snowball tracer
   // Cycle through the array, using a different entry on each frame.
@@ -152,7 +224,7 @@ function draw() {
     flake.display(); // draw snowflake
   }
 
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 1; i++) {
 
     //circle top left
     // circle.fill = random(0, 150);

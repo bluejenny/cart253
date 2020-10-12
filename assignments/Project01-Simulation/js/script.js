@@ -50,6 +50,7 @@ let snowflakes = [];
 // for landscape lines
 let a;
 let b;
+let sundogArea = false;
 
 
 //rainbow graphic
@@ -90,121 +91,15 @@ function draw() {
   //mouseX position by mapping the alpha level to the mouse position
   let m = map(mouseY, 0, height, 255, 100);
   fill(bgLight.r, bgLight.g, bgLight.b, m);
-  rect(0, 0, width, height);
+  rect(0, 0, width, height); //light sky
 
 
-  // draw star/sun lines
-  // stroke(245);
-
-  push();
-  strokeWeight(1);
-  stroke(random(225, 255));
-
-  // centering the star/sun around cursor or close enough
-  translate(mouseX + -width/2, mouseY + -height/2 - 200);
-
-  points 			= 16;					//number of points
-  pointAngle 	= 360/points; //angle between points
-  radius 			= width/2; 		//length of each line from centre to edge of circle
-
-  for (angle = 270; angle < 630; angle = angle + pointAngle) {
-  	x = cos(radians(angle)) * radius; //convert angle to radians for x and y coordinates
-  	y = sin(radians(angle)) * radius;
-  	line(radius, radius, x+radius, y+radius);
-
-}
-
-if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-140 && mouseY > height/4) {
-  noFill();
-
-  //rainbow graphic
-  push();
-
-  for (let k=0; k<1; k++) {
-  ellipseMode(CENTER);
-  strokeWeight(10)
-
-  X = mouseY-193;
-
-  //rainbow colors
-
-  noFill();
-
-  //violet
-  stroke(100,0,200,X);
-  ellipse(radius, radius, 230);
-
-  //indigo
-  stroke(150,0,200,X-20);
-  ellipse(radius, radius, 220);
-
-  //blue
-  stroke(0,150,250,X);
-  ellipse(radius, radius, 215);
-
-  //green
-  stroke(20,250,20,X);
-  ellipse(radius, radius, 210);
-
-  //yellow
-  stroke(250,250,0,X-20);
-  ellipse(radius, radius, 205);
-
-  //orange
-  stroke(250,150,40,X);
-  ellipse(radius, radius, 200);
-
-  //red
-  stroke(240,20,20,X);
-  ellipse(radius, radius, 190);
-
-  //sundog circle
-  imageMode(CENTER);
-  image(img, radius, radius);
-
-  if (mouseIsPressed) {
-
-  }
-  pop();
-}
-}
-
-
-
-  pop();
+  sky();
+  landscape();
 
 
 
 
-
-  // create the landscape
-  push();
-  stroke(225);
-  let m2 = map(mouseY, 0, height, 225, 0);
-  fill(87, 97, 109);
-  triangle(mouseX-150, 2*height/3, 0, 250, 0, height);
-  triangle(mouseX+150, 2*height/3, width, 200, width, height);
-
-  fill(162, 180, 195, m2);
-  triangle(mouseX-150, 2*height/3, 0, 250, 0, height);
-  triangle(mouseX+150, 2*height/3, width, 200, width, height);
-
-  fill(182, 203, 220, 200);
-  rect(0, 2*height/3, width, height/2);
-
-
-  let m3 = map(mouseY, 0, height, 225, 50);
-  fill(87, 97, 109);
-  triangle(mouseX-10, 2*height/3, 0, 350, 0, height);
-  triangle(mouseX+10, 2*height/3, width, 350, width, height);
-  fill(157, 175, 190, m3);
-  triangle(mouseX-10, 2*height/3, 0, 350, 0, height);
-  triangle(mouseX+10, 2*height/3, width, 350, width, height);
-  stroke(235);
-  fill(182, 203, 220, 200);
-  rect(0, 2*height/3, width, height/2);
-
-  pop();
 
   // moving line landscape
   push();
@@ -240,45 +135,9 @@ if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-140 && m
     flake.display(); // draw snowflake
   }
 
-
-// flickering crystals
-  for (let i = 0; i < 1; i++) {
-
-    //circle top left
-    // circle.fill = random(0, 150);
-    // circle.size = random(0, 70);
-    // circle.x = random(0, mouseX);
-    // circle.y = random(0, mouseY);
-    // fill(circle.fill);
-    // // circle.x = circle.x + circle.speed;
-    // ellipse(circle.x, circle.y, circle.size);
-
-    //circle top right
-    hex2.fill = random(200, 255);
-    hex2.size = random(0, 40);
-    hex2.x = random(mouseX, width);
-    hex2.y = random(0, mouseY);
-    fill(hex2.fill);
-    hex.x = hex2.x + hex2.speed;
-    hexagon(hex2.x, hex2.y, hex2.size);
-
-    //circle bottom left
-    hex3.fill = random(200, 255);
-    hex3.size = random(0, 30);
-    hex3.x = random(0, mouseX);
-    hex3.y = random(height, mouseY);
-    fill(hex3.fill);
-    hex3.x = hex3.x + hex3.speed;
-    hexagon(hex3.x, hex3.y, hex3.size);
-
-    //circle bottom right
-    // circle4.fill = random(0, 150);
-    // circle4.size = random(0, 40);
-    // circle4.x = random(mouseX, width);
-    // circle4.y = random(height, mouseY);
-    // fill(circle4.fill);
-    // circle4.x = circle4.x + circle4.speed;
-    // ellipse(circle4.x, circle4.y, circle4.size);
+if (sundogArea) {
+// flickering ice crystals
+  iceCrystals();
   }
 }
 
@@ -336,6 +195,130 @@ function snowflake() {
   // pop();
 }
 
+function sky() {
+  // draw star/sun lines
+  // stroke(245);
+
+  push();
+  strokeWeight(1);
+  stroke(random(225, 255));
+
+  // centering the star/sun around cursor or close enough
+  translate(mouseX + -width/2, mouseY + -height/2 - 200);
+
+  points 			= 16;					//number of points
+  pointAngle 	= 360/points; //angle between points
+  radius 			= width/2; 		//length of each line from centre to edge of circle
+
+  for (angle = 270; angle < 630; angle = angle + pointAngle) {
+  	x = cos(radians(angle)) * radius; //convert angle to radians for x and y coordinates
+  	y = sin(radians(angle)) * radius;
+  	line(radius, radius, x+radius, y+radius);
+
+}
+
+  // only show in specific area
+  if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-140 && mouseY > height/4) {
+  noFill();
+  sundogArea = true;
+
+  //rainbow graphic
+  push();
+
+  for (let k=0; k<1; k++) {
+  ellipseMode(CENTER);
+  strokeWeight(10)
+
+  X = mouseY-193;
+
+  //rainbow colors
+
+  noFill();
+
+  //violet
+  stroke(100,0,200,X);
+  ellipse(radius, radius, 230);
+
+  //indigo
+  stroke(150,0,200,X-20);
+  ellipse(radius, radius, 220);
+
+  //blue
+  stroke(0,150,250,X);
+  ellipse(radius, radius, 215);
+
+  //green
+  stroke(20,250,20,X);
+  ellipse(radius, radius, 210);
+
+  //yellow
+  stroke(250,250,0,X-20);
+  ellipse(radius, radius, 205);
+
+  //orange
+  stroke(250,150,40,X);
+  ellipse(radius, radius, 200);
+
+  //red
+  stroke(240,20,20,X);
+  ellipse(radius, radius, 190);
+
+  //sundog circle
+  imageMode(CENTER);
+  image(img, radius, radius);
+
+  //sundog bright spots
+  push();
+  fill(random(200, 255), 200);
+  noStroke();
+  hexagon(radius + 100, radius - 22, 7);
+  hexagon(radius - 100, radius - 22, 7);
+  pop();
+
+  if (mouseIsPressed) {
+
+  }
+  pop();
+  }
+}
+else {
+  sundogArea = false;
+}
+
+  pop();
+}
+
+function landscape() {
+  // create the landscape
+  push();
+  stroke(225);
+  let m2 = map(mouseY, 0, height, 225, 0);
+  fill(87, 97, 109);
+  triangle(mouseX-150, 2*height/3, 0, 250, 0, height);
+  triangle(mouseX+150, 2*height/3, width, 200, width, height);
+
+  fill(162, 180, 195, m2);
+  triangle(mouseX-150, 2*height/3, 0, 250, 0, height);
+  triangle(mouseX+150, 2*height/3, width, 200, width, height);
+
+  fill(182, 203, 220, 200);
+  rect(0, 2*height/3, width, height/2);
+
+
+  let m3 = map(mouseY, 0, height, 225, 50);
+  fill(87, 97, 109);
+  triangle(mouseX-10, 2*height/3, 0, 350, 0, height);
+  triangle(mouseX+10, 2*height/3, width, 350, width, height);
+  fill(157, 175, 190, m3);
+  triangle(mouseX-10, 2*height/3, 0, 350, 0, height);
+  triangle(mouseX+10, 2*height/3, width, 350, width, height);
+  stroke(235);
+  fill(182, 203, 220, 200);
+  rect(0, 2*height/3, width, height/2);
+
+  pop();
+}
+
 //draws a hexagon
 function hexagon (x, y, r) {
 
@@ -354,6 +337,46 @@ function hexagon (x, y, r) {
 
 }
 
+function iceCrystals() {
+  for (let i = 0; i < 1; i++) {
+
+    //circle top left
+    // circle.fill = random(0, 150);
+    // circle.size = random(0, 70);
+    // circle.x = random(0, mouseX);
+    // circle.y = random(0, mouseY);
+    // fill(circle.fill);
+    // // circle.x = circle.x + circle.speed;
+    // ellipse(circle.x, circle.y, circle.size);
+
+    //circle top right
+    hex2.fill = random(200, 255);
+    hex2.size = random(0, 40);
+    hex2.x = random(mouseX, width);
+    hex2.y = random(0, mouseY);
+    fill(hex2.fill);
+    hex.x = hex2.x + hex2.speed;
+    hexagon(hex2.x, hex2.y, hex2.size);
+
+    //circle bottom left
+    hex3.fill = random(200, 255);
+    hex3.size = random(0, 30);
+    hex3.x = random(0, mouseX);
+    hex3.y = random(height, mouseY);
+    fill(hex3.fill);
+    hex3.x = hex3.x + hex3.speed;
+    hexagon(hex3.x, hex3.y, hex3.size);
+
+    //circle bottom right
+    // circle4.fill = random(0, 150);
+    // circle4.size = random(0, 40);
+    // circle4.x = random(mouseX, width);
+    // circle4.y = random(height, mouseY);
+    // fill(circle4.fill);
+    // circle4.x = circle4.x + circle4.speed;
+    // ellipse(circle4.x, circle4.y, circle4.size);
+  }
+}
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

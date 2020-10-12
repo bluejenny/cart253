@@ -84,9 +84,9 @@ function setup() {
 }
 
 
-// function preload() {
-//     img = loadImage('../assets/images/halo.png');
-//   }
+function preload() {
+    img = loadImage('../assets/images/halo.png');
+  }
 
 
 function draw() {
@@ -282,16 +282,17 @@ function sky() {
     //   size += 10;
     // }
     push();
-    // fill(random(200, 255), 200);
-    // noStroke();
-    // hexagon(radius, radius, 7);
+    fill(random(200, 255), 200);
+    noStroke();
+    hexagon(radius, radius, 7);
     // hexagon(radius + size, radius - 5, 5);
     // hexagon(radius - size, radius - 5, 5);
 
     //sundog circle
-    // imageMode(CENTER);
-    // image(img, radius, radius);
-    // img.resize(200, 0);
+    imageMode(CENTER);
+    image(img, radius, radius);
+    img.resize(150, 0);
+      img.resize(150, 0);
     pop();
   }
   pop();

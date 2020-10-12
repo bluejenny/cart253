@@ -52,6 +52,10 @@ let a;
 let b;
 
 
+//rainbow graphic
+var X = 0;
+
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   // displayWidth();
@@ -82,12 +86,11 @@ let img;
 function draw() {
   background(bgDark.r, bgDark.g, bgDark.b);
 
-
   //creates the effect of sky getting lighter or darker based on
   //mouseX position by mapping the alpha level to the mouse position
   let m = map(mouseY, 0, height, 255, 100);
   fill(bgLight.r, bgLight.g, bgLight.b, m);
-  rect(0, 0, width, height); //
+  rect(0, 0, width, height);
 
 
   // draw star/sun lines
@@ -109,19 +112,69 @@ function draw() {
   	y = sin(radians(angle)) * radius;
   	line(radius, radius, x+radius, y+radius);
 
-    if (mouseX === width/2 && mouseY === height/2-150) {
-      noFill();
-      ellipse(radius, radius, 200); //draw a line from each point back to the centre
-    }
-	}
+}
+
+if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-140 && mouseY > height/4) {
+  noFill();
+
+  //rainbow graphic
+  push();
+
+  for (let k=0; k<1; k++) {
+  ellipseMode(CENTER);
+  strokeWeight(10)
+
+  X = mouseY-193;
+
+  //rainbow colors
+
+  noFill();
+
+  //violet
+  stroke(100,0,200,X);
+  ellipse(radius, radius, 230);
+
+  //indigo
+  stroke(150,0,200,X-20);
+  ellipse(radius, radius, 220);
+
+  //blue
+  stroke(0,150,250,X);
+  ellipse(radius, radius, 215);
+
+  //green
+  stroke(20,250,20,X);
+  ellipse(radius, radius, 210);
+
+  //yellow
+  stroke(250,250,0,X-20);
+  ellipse(radius, radius, 205);
+
+  //orange
+  stroke(250,150,40,X);
+  ellipse(radius, radius, 200);
+
+  //red
+  stroke(240,20,20,X);
+  ellipse(radius, radius, 190);
 
   //sundog circle
-
   imageMode(CENTER);
   image(img, radius, radius);
 
+  if (mouseIsPressed) {
+
+  }
+  pop();
+}
+}
+
+
 
   pop();
+
+
+
 
 
   // create the landscape
@@ -202,7 +255,7 @@ function draw() {
 
     //circle top right
     hex2.fill = random(200, 255);
-    hex2.size = random(0, 50);
+    hex2.size = random(0, 40);
     hex2.x = random(mouseX, width);
     hex2.y = random(0, mouseY);
     fill(hex2.fill);
@@ -270,8 +323,8 @@ function snowflake() {
   // fill(255, 175);
   // rect(width/10, height/10, width/10 *8, height /10*8)
   //
-  // let title = 'Snowdog Simulation';
-  // textSize(44);
+  // let title = 'Snowdog\nSimulation\nV.1.0';
+  // textSize(50);
   // fill(58, 66, 77, 175);
   // textAlign(CENTER, TOP);
   // text(title, width/9, height/5, width/10 *8, height /10*6);
@@ -305,10 +358,3 @@ function hexagon (x, y, r) {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
-
-
-
-
-// console.log(`circle.x: $(circle.x)`);
- // console.log(randomNumber);

@@ -80,7 +80,7 @@ function setup() {
 
 }
 
-let img;
+//let img;
   // function preload() {
   //   img = loadImage('../assets/images/halo2.png');
   // }

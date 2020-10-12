@@ -81,9 +81,9 @@ function setup() {
 }
 
 let img;
-  function preload() {
-    img = loadImage('../assets/images/halo2.png');
-  }
+  // function preload() {
+  //   img = loadImage('../assets/images/halo2.png');
+  // }
 
 
 function draw() {

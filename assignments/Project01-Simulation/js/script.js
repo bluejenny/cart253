@@ -84,9 +84,9 @@ function setup() {
 }
 
 
-function preload() {
-    img = loadImage('../assets/images/halo.png');
-  }
+// function preload() {
+//     img = loadImage('../assets/images/halo.png');
+//   }
 
 
 function draw() {
@@ -289,9 +289,9 @@ function sky() {
     // hexagon(radius - size, radius - 5, 5);
 
     //sundog circle
-    imageMode(CENTER);
-    image(img, radius, radius);
-    img.resize(200, 0);
+    // imageMode(CENTER);
+    // image(img, radius, radius);
+    // img.resize(200, 0);
     pop();
   }
   pop();

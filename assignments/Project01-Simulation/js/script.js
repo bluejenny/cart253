@@ -58,6 +58,9 @@ let size = 20;
 //rainbow graphic
 var X = 0;
 
+//halo
+let img;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -80,10 +83,10 @@ function setup() {
 
 }
 
-//let img;
-  // function preload() {
-  //   img = loadImage('../assets/images/halo2.png');
-  // }
+
+function preload() {
+    img = loadImage('../assets/images/halo.png');
+  }
 
 
 function draw() {
@@ -240,16 +243,16 @@ function sky() {
   noFill();
 
   //violet
-  stroke(100,0,200,X);
-  ellipse(radius, radius, size+40);
+  stroke(100,0,200,X-10);
+  ellipse(radius, radius, size+45);
 
   //indigo
-  stroke(150,0,200,X-20);
-  ellipse(radius, radius, size+30);
+  stroke(150,0,200,X-10);
+  ellipse(radius, radius, size+35);
 
   //blue
   stroke(0,150,250,X);
-  ellipse(radius, radius, size+25);
+  ellipse(radius, radius, size+30);
 
   //green
   stroke(20,250,20,X);
@@ -267,27 +270,29 @@ function sky() {
   stroke(240,20,20,X);
   ellipse(radius, radius, size);
 
-  //sundog circle
-  // imageMode(CENTER);
-  // image(img, radius, radius);
+
 
   //sundog bright spots
-  push();
-  fill(random(200, 255), 125);
-  noStroke();
-  // hexagon(radius, radius, 5);
-  // hexagon(radius + size+6, radius - 5, 3);
-  // hexagon(radius - size-5, radius - 5, 3);
-  // hexagon(radius + size+6, radius - 4, 3);
-  // hexagon(radius - size-5, radius - 4, 3);
-  // hexagon(radius + size+6, radius - 3, 3);
-  // hexagon(radius - size-5, radius - 3, 3);
-  // hexagon(radius + size+6, radius - 2, 3);
-  // hexagon(radius - size-5, radius - 2, 3);
-  pop();
 
-  if (mouseIsPressed) {
-    size += 10;
+
+  if (mouseIsPressed && X > 10) {
+    // if (size > width) {
+    //   size =10;
+    // }else {
+    //   size += 10;
+    // }
+    push();
+    // fill(random(200, 255), 200);
+    // noStroke();
+    // hexagon(radius, radius, 7);
+    // hexagon(radius + size, radius - 5, 5);
+    // hexagon(radius - size, radius - 5, 5);
+
+    //sundog circle
+    imageMode(CENTER);
+    image(img, radius, radius);
+    img.resize(150, 0);
+    pop();
   }
   pop();
   }

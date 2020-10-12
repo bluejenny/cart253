@@ -50,8 +50,10 @@ let snowflakes = [];
 // for landscape lines
 let a;
 let b;
-let sundogArea = false;
 
+// for rainbow animation
+let sundogArea = false;
+let size = 20;
 
 //rainbow graphic
 var X = 0;
@@ -59,7 +61,7 @@ var X = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // displayWidth();
+
   noStroke();
   noCursor();
 
@@ -206,7 +208,7 @@ function sky() {
   // centering the star/sun around cursor or close enough
   translate(mouseX + -width/2, mouseY + -height/2 - 200);
 
-  points 			= 16;					//number of points
+  points 			= 18;					//number of points
   pointAngle 	= 360/points; //angle between points
   radius 			= width/2; 		//length of each line from centre to edge of circle
 
@@ -218,16 +220,18 @@ function sky() {
 }
 
   // only show in specific area
-  if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-140 && mouseY > height/4) {
+  if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-143 && mouseY > height/4) {
   noFill();
   sundogArea = true;
 
   //rainbow graphic
   push();
 
+
+
   for (let k=0; k<1; k++) {
   ellipseMode(CENTER);
-  strokeWeight(10)
+  strokeWeight(10);
 
   X = mouseY-193;
 
@@ -237,46 +241,53 @@ function sky() {
 
   //violet
   stroke(100,0,200,X);
-  ellipse(radius, radius, 230);
+  ellipse(radius, radius, size+40);
 
   //indigo
   stroke(150,0,200,X-20);
-  ellipse(radius, radius, 220);
+  ellipse(radius, radius, size+30);
 
   //blue
   stroke(0,150,250,X);
-  ellipse(radius, radius, 215);
+  ellipse(radius, radius, size+25);
 
   //green
   stroke(20,250,20,X);
-  ellipse(radius, radius, 210);
+  ellipse(radius, radius, size+20);
 
   //yellow
   stroke(250,250,0,X-20);
-  ellipse(radius, radius, 205);
+  ellipse(radius, radius, size+15);
 
   //orange
   stroke(250,150,40,X);
-  ellipse(radius, radius, 200);
+  ellipse(radius, radius, size+10);
 
   //red
   stroke(240,20,20,X);
-  ellipse(radius, radius, 190);
+  ellipse(radius, radius, size);
 
   //sundog circle
-  imageMode(CENTER);
-  image(img, radius, radius);
+  // imageMode(CENTER);
+  // image(img, radius, radius);
 
   //sundog bright spots
   push();
-  fill(random(200, 255), 200);
+  fill(random(200, 255), 125);
   noStroke();
-  hexagon(radius + 100, radius - 22, 7);
-  hexagon(radius - 100, radius - 22, 7);
+  // hexagon(radius, radius, 5);
+  // hexagon(radius + size+6, radius - 5, 3);
+  // hexagon(radius - size-5, radius - 5, 3);
+  // hexagon(radius + size+6, radius - 4, 3);
+  // hexagon(radius - size-5, radius - 4, 3);
+  // hexagon(radius + size+6, radius - 3, 3);
+  // hexagon(radius - size-5, radius - 3, 3);
+  // hexagon(radius + size+6, radius - 2, 3);
+  // hexagon(radius - size-5, radius - 2, 3);
   pop();
 
   if (mouseIsPressed) {
-
+    size += 10;
   }
   pop();
   }

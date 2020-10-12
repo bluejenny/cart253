@@ -289,9 +289,9 @@ function sky() {
     // hexagon(radius - size, radius - 5, 5);
 
     //sundog circle
-    imageMode(CENTER);
-    image(img, radius, radius);
-    img.resize(150, 0);
+    // imageMode(CENTER);
+    // image(img, radius, radius);
+    // img.resize(150, 0);
     pop();
   }
   pop();

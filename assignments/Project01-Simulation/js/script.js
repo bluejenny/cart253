@@ -87,7 +87,7 @@ function setup() {
 
 
 function preload() {
-    img = loadImage('../assets/images/halo.png');
+    img = loadImage('assets/images/halo.png');
   }
 
 

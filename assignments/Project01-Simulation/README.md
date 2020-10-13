@@ -1,3 +1,5 @@
-# Template p5 project
+# Project 1 : Simulation
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+Sundogs often form in pairs on either side of the sun when sunlight refracts through icy clouds containing hexagonal crystals. They can occur during all seasons, but they are most common during winter months when ice crystals are more abundant. Despite their beauty, sundogs are a sign of bad weather to come.
+
+See if you are able to find the sundog by watching for crystals and rainbows. Click on the sun when colors are most vibrant to 

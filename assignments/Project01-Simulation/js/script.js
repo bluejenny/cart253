@@ -61,6 +61,8 @@ var X = 0;
 //halo
 let img;
 
+let state = `title`; // possible states are title, animation and ending
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -92,58 +94,51 @@ function preload() {
 function draw() {
   background(bgDark.r, bgDark.g, bgDark.b);
 
-  //creates the effect of sky getting lighter or darker based on
-  //mouseX position by mapping the alpha level to the mouse position
-  let m = map(mouseY, 0, height, 255, 100);
-  fill(bgLight.r, bgLight.g, bgLight.b, m);
-  rect(0, 0, width, height); //light sky
+  if (state === `title`) {
 
+    // title
+    title();
 
+  }
+  else if (state === `animation`) {
+
+  animation();
+}
+
+  else if (state === `ending`) {
+
+  }
+
+}
+
+function keyPressed() {
+  if (state === `title`) {
+    state = `animation`;
+  }
+}
+
+function animation() {
   sky();
   landscape();
+  landscapeMovingLine();
+  fallingSnow();
+}
 
+function fallingSnow() {
+  // draw falling snow
 
+   let t = frameCount / 60; // update time
 
+   //create a random number of snowflakes each frame
+   for (let i = 0; i < random(1); i++) {
+     snowflakes.push(new snowflake()); // append snowflake object
+   }
 
-
-  // moving line landscape
-  push();
-  stroke(182, 203, 220, 200);
-  fill(0, 10);
-  rect(0, a, width, a);
-  a = a + .1;
-  if (a > height-100) {
-    a = height/3 *2;
-  }
-
-  // 2nd set of lines
-  // line(0, b, width, b);
-  // b = b + .2;
-  // if (b > height-20) {
-  //   b = height/3 *2;
-  // }
-  pop();
-
-
-// draw falling snow
-
- let t = frameCount / 60; // update time
-
- //create a random number of snowflakes each frame
- for (let i = 0; i < random(1); i++) {
-   snowflakes.push(new snowflake()); // append snowflake object
- }
-
- //loop through snowflakes with a for..of loop
-  for (let flake of snowflakes) {
-    flake.update(t); // update snowflake position
-    flake.display(); // draw snowflake
-  }
-
-if (sundogArea) {
-// flickering ice crystals
-  iceCrystals();
-  }
+   //loop through snowflakes with a for..of loop
+    for (let flake of snowflakes) {
+      flake.update(t); // update snowflake position
+      flake.display(); // draw snowflake
+    }
 }
 
 // snowflake class
@@ -198,9 +193,37 @@ function snowflake() {
   // let text1 = 'press any key to start [ ]';
   // text(text1, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
   // pop();
+
+}
+
+function title() {
+  //  title slide
+  push();
+  fill(bgLight.r, bgLight.g, bgLight.b, 225);
+  rect(0, 0, width, height);
+
+  let h1 = 'Snowdog Simulation\nV.1.0';
+  textSize(50);
+  fill(58, 66, 77, 175);
+  textAlign(CENTER, TOP);
+  text(h1, width/9, height/6, width/10 *8, height /10*6);
+
+  textSize(28);
+  textAlign(CENTER, CENTER);
+  let text1 = 'press any key to start [ _ ]';
+  text(text1, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
+  pop();
+
+  landscape();
 }
 
 function sky() {
+  //creates the effect of sky getting lighter or darker based on
+  //mouseX position by mapping the alpha level to the mouse position
+  let m = map(mouseY, 0, height, 255, 100);
+  fill(bgLight.r, bgLight.g, bgLight.b, m);
+  rect(0, 0, width, height); //light sky
+
   // draw star/sun lines
   // stroke(245);
 
@@ -292,7 +315,7 @@ function sky() {
     imageMode(CENTER);
     image(img, radius, radius);
     img.resize(150, 0);
-      img.resize(150, 0);
+    img.resize(150, 0);
     pop();
   }
   pop();
@@ -303,6 +326,11 @@ else {
 }
 
   pop();
+
+  if (sundogArea) {
+  // flickering ice crystals
+    iceCrystals();
+    }
 }
 
 function landscape() {
@@ -333,6 +361,26 @@ function landscape() {
   fill(182, 203, 220, 200);
   rect(0, 2*height/3, width, height/2);
 
+  pop();
+}
+
+function landscapeMovingLine() {
+  // moving line landscape
+  push();
+  stroke(182, 203, 220, 200);
+  fill(0, 10);
+  rect(0, a, width, a);
+  a = a + .1;
+  if (a > height-100) {
+    a = height/3 *2;
+  }
+
+  // 2nd set of lines
+  // line(0, b, width, b);
+  // b = b + .2;
+  // if (b > height-20) {
+  //   b = height/3 *2;
+  // }
   pop();
 }
 

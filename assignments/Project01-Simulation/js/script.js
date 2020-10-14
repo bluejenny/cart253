@@ -45,6 +45,13 @@ let hex4 = {
   speed: .01
 }
 
+let spotRect = {
+  x: 0,
+  y: 0,
+  width: 50,
+  height: 50
+}
+
 let snowflakes = [];
 
 // for landscape lines
@@ -64,6 +71,11 @@ let img;
 let state = `title`; // possible states are title, animation and ending
 
 
+function preload() {
+    img = loadImage('assets/images/halo.png');
+  }
+
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -74,8 +86,7 @@ function setup() {
   b = height / 3 * 2;
 
   // set the starting position of sun in sky
-  mouseX = width/2;
-  mouseY = height/2-150;
+  resetMouse();
 
   //adjust size for vertical screens
   if (width < 900) {
@@ -85,10 +96,10 @@ function setup() {
 
 }
 
-
-function preload() {
-    img = loadImage('assets/images/halo.png');
-  }
+function resetMouse() {
+  mouseX = width/2;
+  mouseY = height/2;
+}
 
 
 function draw() {
@@ -101,12 +112,11 @@ function draw() {
 
   }
   else if (state === `animation`) {
-
   animation();
 }
 
   else if (state === `ending`) {
-
+    ending();
   }
 
 }
@@ -114,7 +124,31 @@ function draw() {
 function keyPressed() {
   if (state === `title`) {
     state = `animation`;
+  } else if (state === `ending`) {
+    state = `animation`;
   }
+
+}
+
+function title() {
+  //  title slide
+  push();
+  fill(bgLight.r, bgLight.g, bgLight.b, 225);
+  rect(0, 0, width, height);
+
+  let h1 = 'Snowdog Simulation\nV.1.0';
+  textSize(42);
+  fill(58, 66, 77, 175);
+  textAlign(CENTER, TOP);
+  text(h1, width/9, height/6, width/10 *8, height /10*6);
+
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  let text1 = 'press any key to start [ _ ]';
+  text(text1, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
+  pop();
+
+  landscape();
 }
 
 function animation() {
@@ -122,6 +156,64 @@ function animation() {
   landscape();
   landscapeMovingLine();
   fallingSnow();
+
+  if (mouseY > height/3*2) {
+    state = `ending`;
+  }
+}
+
+function ending() {
+  push();
+  landscape();
+  fill(bgDark.r, bgDark.g, bgDark.b, 100)
+  rect(0, 0, width, height);
+
+  //display static
+
+  for (let i = 0; i < 10; i++) {
+  // let x = random(0, width);
+  // let y = random(0, height);
+  // // noFill();
+  translate(width-200, 50);
+  stroke(random(200, 245));
+  // point(x, y);
+  points 			= 18;					//number of points
+  pointAngle 	= 360/points; //angle between points
+  radius 			= 40; 		//length of each line from centre to edge of circle
+
+  for (angle = 270; angle < 630; angle = angle + pointAngle) {
+    x = cos(radians(angle)) * radius; //convert angle to radians for x and y coordinates
+    y = sin(radians(angle)) * radius;
+    line(radius, radius, x+radius, y+radius);
+
+}
+  }
+
+  pop();
+
+  fill(255, 150);
+  let h1 = 'The sun has set.';
+  let text1 = 'You will not see it now.\nIf unable to see, here is a hint. ';
+  let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon. If still not successfull,\ntry resizing your browser window, or moving your mouse.'
+  textSize(42);
+  textAlign(CENTER, TOP);
+  text(h1, width/9, height/6, width/10 *8, height /10*6);
+  textSize(24);
+  text(text1, width/9, height/6 + 60, width/10 *8, height /10*6);
+
+  push();
+  textStyle(ITALIC);
+  textSize(16);
+  text(text2, width/9, height/6 + 130, width/10 *8, height /10*6);
+  pop();
+
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  let text3 = 'press any key to go back [ _ ]';
+  text(text3, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
+
+
+
 }
 
 function fallingSnow() {
@@ -174,47 +266,6 @@ function snowflake() {
     ellipse(this.posX, this.posY, this.size);
   };
 
-
-
-
-//first state, text slide.
-  // push();
-  // fill(255, 175);
-  // rect(width/10, height/10, width/10 *8, height /10*8)
-  //
-  // let title = 'Snowdog\nSimulation\nV.1.0';
-  // textSize(50);
-  // fill(58, 66, 77, 175);
-  // textAlign(CENTER, TOP);
-  // text(title, width/9, height/5, width/10 *8, height /10*6);
-  //
-  // textSize(28);
-  // textAlign(CENTER, BOTTOM);
-  // let text1 = 'press any key to start [ ]';
-  // text(text1, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
-  // pop();
-
-}
-
-function title() {
-  //  title slide
-  push();
-  fill(bgLight.r, bgLight.g, bgLight.b, 225);
-  rect(0, 0, width, height);
-
-  let h1 = 'Snowdog Simulation\nV.1.0';
-  textSize(50);
-  fill(58, 66, 77, 175);
-  textAlign(CENTER, TOP);
-  text(h1, width/9, height/6, width/10 *8, height /10*6);
-
-  textSize(28);
-  textAlign(CENTER, CENTER);
-  let text1 = 'press any key to start [ _ ]';
-  text(text1, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
-  pop();
-
-  landscape();
 }
 
 function sky() {
@@ -246,9 +297,13 @@ function sky() {
 }
 
   // only show in specific area
-  if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-143 && mouseY > height/4) {
+
+  // if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-143 && mouseY > height/4)
+
+  if (mouseX > radius - 25 && mouseX < radius + 25 && mouseY < height/2 -50) {
   noFill();
   sundogArea = true;
+
 
   //rainbow graphic
   push();
@@ -257,40 +312,40 @@ function sky() {
 
   for (let k=0; k<1; k++) {
   ellipseMode(CENTER);
-  strokeWeight(10);
-
-  X = mouseY-193;
+  strokeWeight(8);
+  //
+  X = mouseY-280;
 
   //rainbow colors
 
   noFill();
 
   //violet
-  stroke(100,0,200,X-10);
+  stroke(100, 0, 200, X-10);
   ellipse(radius, radius, size+45);
 
   //indigo
-  stroke(150,0,200,X-10);
+  stroke(150, 0, 200, X-10);
   ellipse(radius, radius, size+35);
 
   //blue
-  stroke(0,150,250,X);
+  stroke(0, 150, 250, X);
   ellipse(radius, radius, size+30);
 
   //green
-  stroke(20,250,20,X);
+  stroke(20, 250, 20, X);
   ellipse(radius, radius, size+20);
 
   //yellow
-  stroke(250,250,0,X-20);
+  stroke(250, 250, 0, X-20);
   ellipse(radius, radius, size+15);
 
   //orange
-  stroke(250,150,40,X);
+  stroke(250, 150, 40, X);
   ellipse(radius, radius, size+10);
 
   //red
-  stroke(240,20,20,X);
+  stroke(240, 20, 20, X);
   ellipse(radius, radius, size);
 
 

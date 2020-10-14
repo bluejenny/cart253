@@ -190,7 +190,7 @@ function ending() {
 
   fill(255, 150);
   let h1 = 'The sun has set.';
-  let text1 = 'Try again tomorrow. If you could not find, Here is a hint. ';
+  let text1 = 'Try again tomorrow. If you could not find, here is a hint. ';
   let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon. If still not successfull,\ntry resizing your browser window, or moving your mouse around.'
   textSize(42);
   textAlign(CENTER, TOP);

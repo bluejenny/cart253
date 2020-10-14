@@ -82,6 +82,7 @@ function setup() {
   noStroke();
   noCursor();
 
+  //for landscape function
   a = height / 3 * 2;
   b = height / 3 * 2;
 
@@ -89,10 +90,10 @@ function setup() {
   resetMouse();
 
   //adjust size for vertical screens
-  if (width < 900) {
-    mouseX = width/2;
-    mouseY = height/2+ 200;
-  }
+  // if (width < 900) {
+  //   mouseX = width/2;
+  //   mouseY = height/2+ 200;
+  // }
 
 }
 
@@ -190,7 +191,7 @@ function ending() {
 
   fill(255, 150);
   let h1 = 'The sun has set.';
-  let text1 = 'Try again tomorrow. If you could not find, here is a hint. ';
+  let text1 = 'Try again tomorrow. If you can\'t find, read below. ';
   let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon but can happen througout the day.\nWhen you see a rainbow circle, you are close. You can also try resizing\nyour browser window and moving your mouse around.'
   textSize(42);
   textAlign(CENTER, TOP);
@@ -358,9 +359,6 @@ function sky() {
     fill(random(200, 255), 200);
     noStroke();
     hexagon(radius, radius, 7);
-    iceCrystals2();
-    // hexagon(radius + size, radius - 5, 5);
-    // hexagon(radius - size, radius - 5, 5);
 
     //sundog circle
     imageMode(CENTER);
@@ -377,11 +375,6 @@ else {
 }
 
   pop();
-
-  if (sundogArea) {
-  // flickering ice crystals
-    iceCrystals();
-    }
 }
 
 function landscape() {
@@ -414,6 +407,13 @@ function landscape() {
   rect(0, 2*height/3, width, height/2);
 
   pop();
+  if (sundogArea) {
+  // flickering ice crystals
+    iceCrystals();
+    }
+  if (mouseIsPressed) {
+    iceCrystals2();
+  }
 }
 
 function landscapeMovingLine() {
@@ -478,11 +478,11 @@ function iceCrystals() {
 }
 
 function iceCrystals2() {
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 3; i++) {
 
     //circle top left
     hex.fill = random(200, 255);
-    hex.size = random(0, 70);
+    hex.size = random(0, 20);
     hex.x = random(0, mouseX);
     hex.y = random(0, mouseY);
     fill(hex.fill);
@@ -491,7 +491,7 @@ function iceCrystals2() {
 
     //circle bottom right
     hex4.fill = random(200, 255);
-    hex4.size = random(0, 40);
+    hex4.size = random(0, 20);
     hex4.x = random(mouseX, width);
     hex4.y = random(height, mouseY);
     fill(hex4.fill);

@@ -309,6 +309,7 @@ function sky() {
   strokeWeight(8);
   //
   X = mouseY-280;
+  constrain(X, 0, 60);
 
   //rainbow colors
 

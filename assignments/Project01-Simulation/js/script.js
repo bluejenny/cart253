@@ -191,7 +191,7 @@ function ending() {
   fill(255, 150);
   let h1 = 'The sun has set.';
   let text1 = 'Try again tomorrow. If you could not find, here is a hint. ';
-  let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon. If still not successfull,\ntry resizing your browser window, or moving your mouse around.'
+  let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon but can happen througout the day.\nWhen you see a rainbow circle, you are close. You can also try resizing\nyour browser window and moving your mouse around.'
   textSize(42);
   textAlign(CENTER, TOP);
   text(h1, width/9, height/6, width/10 *8, height /10*6);
@@ -201,13 +201,13 @@ function ending() {
   push();
   textSize(16);
   textLeading(25);
-  text(text2, width/9, height/6 + 110, width/10 *8, height /10*6);
+  text(text2, width/9, height/6 + 100, width/10 *8, height /10*6);
   pop();
 
   textSize(24);
   textAlign(CENTER, CENTER);
   let text3 = 'press any key to go back [ _ ]';
-  text(text3, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
+  text(text3, width/9, height/6 +30, width/10 *8, height /10*6);// Text wraps within text box
 
 }
 

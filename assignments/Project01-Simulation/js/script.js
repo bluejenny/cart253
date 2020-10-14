@@ -125,6 +125,9 @@ function keyPressed() {
   if (state === `title`) {
     state = `animation`;
   } else if (state === `ending`) {
+    if (mouseY > height/3*2) {
+      resetMouse();
+    }
     state = `animation`;
   }
 
@@ -168,15 +171,9 @@ function ending() {
   fill(bgDark.r, bgDark.g, bgDark.b, 100)
   rect(0, 0, width, height);
 
-  //display static
-
   for (let i = 0; i < 10; i++) {
-  // let x = random(0, width);
-  // let y = random(0, height);
-  // // noFill();
   translate(width-200, 50);
   stroke(random(200, 245));
-  // point(x, y);
   points 			= 18;					//number of points
   pointAngle 	= 360/points; //angle between points
   radius 			= 40; 		//length of each line from centre to edge of circle
@@ -193,26 +190,24 @@ function ending() {
 
   fill(255, 150);
   let h1 = 'The sun has set.';
-  let text1 = 'You will not see it now.\nIf unable to see, here is a hint. ';
-  let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon. If still not successfull,\ntry resizing your browser window, or moving your mouse.'
+  let text1 = 'Try again tomorrow. If you could not find, Here is a hint. ';
+  let text2 = 'Sundogs form when sunlight refracts through icy clouds containing hexagonal crystals.\nSundogs are best seen when the sun is near the horizon. If still not successfull,\ntry resizing your browser window, or moving your mouse around.'
   textSize(42);
   textAlign(CENTER, TOP);
   text(h1, width/9, height/6, width/10 *8, height /10*6);
-  textSize(24);
+  textSize(22);
   text(text1, width/9, height/6 + 60, width/10 *8, height /10*6);
 
   push();
-  textStyle(ITALIC);
   textSize(16);
-  text(text2, width/9, height/6 + 130, width/10 *8, height /10*6);
+  textLeading(25);
+  text(text2, width/9, height/6 + 110, width/10 *8, height /10*6);
   pop();
 
   textSize(24);
   textAlign(CENTER, CENTER);
   let text3 = 'press any key to go back [ _ ]';
   text(text3, width/9, height/6, width/10 *8, height /10*6);// Text wraps within text box
-
-
 
 }
 
@@ -269,6 +264,7 @@ function snowflake() {
 }
 
 function sky() {
+
   //creates the effect of sky getting lighter or darker based on
   //mouseX position by mapping the alpha level to the mouse position
   let m = map(mouseY, 0, height, 255, 100);
@@ -296,9 +292,7 @@ function sky() {
 
 }
 
-  // only show in specific area
-
-  // if (mouseX > width/2 - 75 && mouseX < width/2 + 75 && mouseY < height/2-143 && mouseY > height/4)
+  // only show in specific area\
 
   if (mouseX > radius - 25 && mouseX < radius + 25 && mouseY < height/2 -50) {
   noFill();
@@ -363,6 +357,7 @@ function sky() {
     fill(random(200, 255), 200);
     noStroke();
     hexagon(radius, radius, 7);
+    iceCrystals2();
     // hexagon(radius + size, radius - 5, 5);
     // hexagon(radius - size, radius - 5, 5);
 
@@ -389,6 +384,7 @@ else {
 }
 
 function landscape() {
+
   // create the landscape
   push();
   stroke(225);
@@ -460,15 +456,6 @@ function hexagon (x, y, r) {
 function iceCrystals() {
   for (let i = 0; i < 1; i++) {
 
-    //circle top left
-    // circle.fill = random(0, 150);
-    // circle.size = random(0, 70);
-    // circle.x = random(0, mouseX);
-    // circle.y = random(0, mouseY);
-    // fill(circle.fill);
-    // // circle.x = circle.x + circle.speed;
-    // ellipse(circle.x, circle.y, circle.size);
-
     //circle top right
     hex2.fill = random(200, 255);
     hex2.size = random(0, 40);
@@ -486,15 +473,29 @@ function iceCrystals() {
     fill(hex3.fill);
     hex3.x = hex3.x + hex3.speed;
     hexagon(hex3.x, hex3.y, hex3.size);
+  }
+}
+
+function iceCrystals2() {
+  for (let i = 0; i < 1; i++) {
+
+    //circle top left
+    hex.fill = random(200, 255);
+    hex.size = random(0, 70);
+    hex.x = random(0, mouseX);
+    hex.y = random(0, mouseY);
+    fill(hex.fill);
+    // circle.x = circle.x + circle.speed;
+    hexagon(hex.x, hex.y, hex.size);
 
     //circle bottom right
-    // circle4.fill = random(0, 150);
-    // circle4.size = random(0, 40);
-    // circle4.x = random(mouseX, width);
-    // circle4.y = random(height, mouseY);
-    // fill(circle4.fill);
-    // circle4.x = circle4.x + circle4.speed;
-    // ellipse(circle4.x, circle4.y, circle4.size);
+    hex4.fill = random(200, 255);
+    hex4.size = random(0, 40);
+    hex4.x = random(mouseX, width);
+    hex4.y = random(height, mouseY);
+    fill(hex4.fill);
+    hex4.x = hex4.x + hex4.speed;
+    hexagon(hex4.x, hex4.y, hex4.size);
   }
 }
 

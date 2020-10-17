@@ -1,15 +1,28 @@
 "use strict";
 
 /**************************************************
-06 - Sound
+07 - Intermediate Functions
 with Pippin Barr
 **************************************************/
 
-let barkSFX;
+let user = {
+  x: 0,
+  y: 0,
+  size: 100
+}
 
+let food1 = {
+  x: 250,
+  y: 300,
+  size: 50,
+  eaten: false
+}
 
-function preload() {
-  barkSFX = loadSound(`assets/sounds/bark.wav`);
+let food2 = {
+  x: 350,
+  y: 300,
+  size: 50,
+  alive: false
 }
 
 function setup() {
@@ -26,15 +39,6 @@ function draw() {
   // ellipse(x, y, 100);
 }
 
-function mousePressed() {
-  if (!barkSFX.isPlaying()) {
-  barkSFX.loop();
-  }
-}
-
-function keyPressed() {
-  barkSFX.play();
-}
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

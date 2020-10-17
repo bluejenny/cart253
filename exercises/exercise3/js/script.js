@@ -69,7 +69,6 @@ function secretText() {
 }
 
 function simulation() {
-
   // movement of circle around cursor
   if (mouseX < circle.x) {
     circle.ax = -circle.acceleration;
@@ -175,4 +174,8 @@ function keyPressed() {
   if (keyCode === ESCAPE && state === `simulation`) {
     state = `escape`;
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }

@@ -10,7 +10,7 @@ let fortunes = [
   `you will trip out`,
   `you are going to enjoy something today`,
   `Happiness is yours for the taking`,
-  `You will meet someone special`
+  `You will meet someone special`,
 ];
 
 let soliloquy = [
@@ -21,7 +21,7 @@ let soliloquy = [
   `of outrageous fortune`,
   `or to take arms`,
   `against a sea of sorrow`,
-  `and by opposing end them`
+  `and by opposing end them`,
 ];
 
 let currentIndex = 0;
@@ -33,8 +33,8 @@ let circle = {
   y: 0,
   size: 100,
   trail: [],
-  trailSize: 20
-}
+  trailSize: 20,
+};
 
 let barkSFX;
 
@@ -51,12 +51,10 @@ function setup() {
   fill(255);
 }
 
-
-
 function draw() {
   background(0);
-  text(chosenFortune, width/2, height/2);
-  text(soliloquy[currentIndex], width/2, height/3);
+  text(chosenFortune, width / 2, height / 2);
+  text(soliloquy[currentIndex], width / 2, height / 3);
 
   circle.x = mouseX;
   circle.y = mouseY;
@@ -70,8 +68,8 @@ function draw() {
 
   let newTrailPosition = {
     x: circle.x,
-    y: circle.y
-  }
+    y: circle.y,
+  };
   circle.trail.push(newTrailPosition);
 
   if (circle.trail.length > circle.trailSize) {
@@ -91,7 +89,6 @@ function mousePressed() {
   barkSFX.rate(randomRate);
   barkSFX.play();
 }
-
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

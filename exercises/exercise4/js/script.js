@@ -25,10 +25,14 @@ let state = `animation`; // animation, greenthumb, deadplant
 //   numLeafs: 9
 // }
 
+let growY;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   counter = numAphids;
+  growY = height;
+
 
   for (let i = 0; i < numAphids; i++) {
     aphids[i] = createAphids(random(0, width), random(0, height));
@@ -89,10 +93,11 @@ function animation() {
 
 function greenthumb() {
   drawLeaves();
+  drawFlower();
 }
 
 function deadplant() {
-  drawDeadLeaves2();
+  drawDeadLeaves();
 }
 
 function drawLeaves() {
@@ -129,7 +134,38 @@ function drawLeaves() {
   pop();
 }
 
-function drawDeadLeaves2() {
+function drawFlower() {
+  //Stem
+ stroke(0, 200, 70);
+ strokeWeight(12);
+ line(125, height, 125, growY);
+
+ //Flower
+ let petal = {
+ width: 50,
+ height: 80};
+ noStroke();
+ fill(210, 231, 33);
+ translate(125, growY-40)
+ ellipse(0, 0, petal.width, petal.height);
+ translate(25, 10) //225, -40
+ rotate(45)
+ ellipse(0, 0, petal.width, petal.height);
+ translate(-35, 35) //190, -5
+ rotate(-90)
+ ellipse(0, 0, petal.width, petal.height);
+
+
+ //Grow animation (stem gets infinitely taller
+
+ if (growY < height/3*2.5) {
+   growY = growY
+ }else {
+    growY = growY - 1;
+ }
+}
+
+function drawDeadLeaves() {
   push();
   fill(71, 48, 26);
   stroke(44, 32, 20);

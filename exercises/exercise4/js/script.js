@@ -1,8 +1,10 @@
 "use strict";
 
 /**************************************************
-Exercise 04: The Age of Aquariums
-Jen Poohachoff
+Exercise 04: The Age of Chrysanthemum
+by Jen Poohachoff
+
+do you have a greenthumb?
 **************************************************/
 
 let user = {
@@ -14,17 +16,12 @@ let user = {
 let aphids = [];
 
 let numAphids = 20;
-let counter;
+let counter;  //determines the state
+let maxAphids = 30; // > maxAphids go to deadplant state
 
 let state = `animation`; // animation, greenthumb, deadplant
 
-// let flower = {
-//   x: 0,
-//   y: -35,
-//   rad: 300,
-//   numLeafs: 9
-// }
-
+//for greenthumb state
 let growY;
 
 function setup() {
@@ -67,10 +64,11 @@ function draw() {
   }
 }
 
+
 function animation() {
+
   moveUser();
 
-  // draw leaves
   drawLeaves();
 
   for (let i = 0; i < aphids.length; i++) {
@@ -80,26 +78,26 @@ function animation() {
       displayAphids(aphids[i]);
       pop();
     }
-  displayUser();
 
-  console.log(counter);
+  displayUser(); //ladybug
 
-  if (counter <= 0) {
-    state = `greenthumb`;
-  }else if (counter >= 30) {
-    state = `deadplant`;
-  }
+  //console.log(counter);
+
+  checkCounter(); //to see if too many aphids or if no aphids
 }
 
+// state
 function greenthumb() {
   drawLeaves();
   drawFlower();
 }
 
+// state
 function deadplant() {
   drawDeadLeaves();
 }
 
+//nice leaves, not nice code : /
 function drawLeaves() {
   push();
   fill(7, 99, 29);
@@ -134,29 +132,37 @@ function drawLeaves() {
   pop();
 }
 
+//flower animation for greenthumb state
+// code adapted from https://editor.p5js.org/hosken/sketches/yFz4VpSPr
+
 function drawFlower() {
   //Stem
  stroke(0, 200, 70);
- strokeWeight(12);
+ strokeWeight(20);
  line(125, height, 125, growY);
 
  //Flower
  let petal = {
- width: 50,
- height: 80};
+ width: 105,
+ height: 350};
  noStroke();
  fill(210, 231, 33);
  translate(125, growY-40)
  ellipse(0, 0, petal.width, petal.height);
- translate(25, 10) //225, -40
+ translate(25, 10)
  rotate(45)
  ellipse(0, 0, petal.width, petal.height);
- translate(-35, 35) //190, -5
+ translate(-35, 35)
  rotate(-90)
  ellipse(0, 0, petal.width, petal.height);
+ push();
+ rotate(0);
+ fill(255);
+ ellipse(10, 25, 100);
+ pop();
 
 
- //Grow animation (stem gets infinitely taller
+ //Grow stem until appears at bottom left corner
 
  if (growY < height/3*2.5) {
    growY = growY
@@ -165,6 +171,7 @@ function drawFlower() {
  }
 }
 
+// for state deadplant
 function drawDeadLeaves() {
   push();
   fill(71, 48, 26);
@@ -231,6 +238,8 @@ function checkAphids(aphid) {
   }
 }
 
+//draw user as a ladybug
+// code adapted from https://editor.p5js.org/asadsexyimp/sketches/JJEuHlJDI
 function displayUser() {
   push();
   strokeWeight(6);
@@ -240,7 +249,6 @@ function displayUser() {
   line(user.x - user.size/2+10, user.y - user.size/4, user.x + user.size/2-10, user.y - user.size/4);
   line(user.x, user.y + user.size/2, user.x, user.y - user.size/4);
   fill(41, 25, 31);
-  // ellipse(user.x, user.y ,60);
   ellipse(user.x - user.size/4, user.y - user.size/4+20, user.size/6);
   ellipse(user.x + user.size/4, user.y - user.size/4+20, user.size/6);
   ellipse(user.x - user.size/4 +5, user.y - user.size/4+50, user.size/6);
@@ -248,6 +256,8 @@ function displayUser() {
   pop();
 }
 
+//draw one leaf
+//code adapted from https://editor.p5js.org/xinxin/sketches/DGaWQhtte
 function displayLeaf(leafX, leafY) {
 
   push();
@@ -293,4 +303,12 @@ function mousePressed() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function checkCounter() {
+  if (counter <= 0) {
+    state = `greenthumb`;
+  }else if (counter >= maxAphids) {
+    state = `deadplant`;
+  }
 }

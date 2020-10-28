@@ -76,6 +76,18 @@ function draw() {
   // Display the background
   background(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
 
+  if (state === `animation`) {
+  animation();
+  }
+  else if (state === `greenthumb`) {
+    greenthumb();
+  }
+  else if (state === `deadplant`) {
+    deadplant();
+  }
+}
+
+function animation() {
   // Loop through all the eyes in the array and display them
   for (let i = 0; i < darkRoom.eyes.length; i++) {
     let eye = darkRoom.eyes[i];

@@ -1,3 +1,6 @@
+let state = `animation`; // animation, lightsOn, LightsOut
+
+
 class Light1 {
 
   // constructor() sets up our starting properties
@@ -5,12 +8,11 @@ class Light1 {
     this.x = x;
     this.y = y;
     this.size = 100;
-    this.minSize = 10; // If we get smaller than this minimum we're dead
-    this.maxSize = 1000;
+    this.maxSize = 800;
     this.vx = 0;
     this.vy = 0;
     this.speed = 5;
-    this.growRate = .5; // How much larger we get each frame
+    this.growRate = .3; // How much larger we get each frame
     this.jitteriness = 0.25; // How likely the Light is to change direction
     this.on = true; // The Light starts out on!
   }
@@ -61,20 +63,12 @@ class Light1 {
   // display() draws our Light onto the canvas
   display() {
 
-    // Body
     push();
     fill(225, 225, 100, 50);
     noStroke();
     ellipse(this.x, this.y, this.size);
     pop();
 
-    // Eyes
-    push();
-    // fill(0, 0, 0);
-    // noStroke();
-    // ellipse(this.x - this.size / 10, this.y, this.size / 10);
-    // ellipse(this.x + this.size / 10, this.y, this.size / 10);
-    pop();
   }
 
   mousePressed() {

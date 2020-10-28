@@ -4,14 +4,13 @@ class Light2 {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 10;
-    this.minSize = 10; // If we get smaller than this minimum we're dead
+    this.size = 100;
     this.maxSize = 500;
     this.vx = 0;
     this.vy = 0;
     this.speed = 10;
     this.growRate = .1; // How much larger we get each frame
-    this.jitteriness = 0.25; // How likely the Light is to change direction
+    this.jitteriness = 0.05; // How likely the Light is to change direction
     this.on = true; // The Light starts out on!
   }
 
@@ -62,11 +61,11 @@ class Light2 {
   display() {
 
     push();
-    fill(225, 0, 100, 50);
+    fill(255, 0, 100, random(0, 50));
     noStroke();
-    rect(this.x, this.y, this.size);
+    ellipse(this.x, this.y, this.size);
     pop();
-    
+
   }
 
   mousePressed() {

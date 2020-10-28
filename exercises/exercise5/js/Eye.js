@@ -76,8 +76,8 @@ pollinate() {
   mousePressed() {
     let d = dist(this.x, this.y, mouseX, mouseY);
     if (d < this.size/2 + this.irisThickness) {
-      this.irisThickness += - 1;
-      this.eyeFill += 1;
+      // this.irisThickness += - 1;
+      // this.eyeFill += 1;
       if (this.x < width/2 && this.y < height/2) {
         this.x += -random(0, 10);
         this.y += -random(0, 10);

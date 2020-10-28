@@ -1,7 +1,7 @@
 class Eye {
 
   // The constructor() sets up a flower's properties
-  constructor(x, y, size, irisColor) {
+  constructor(x, y, size, irisColor, eyeCount) {
     //postition for x, y for translate function for shape of eye
     this.x = x;
     this.y = y;
@@ -9,7 +9,7 @@ class Eye {
     this.maxSize = size;
     this.irisThickness = 10;
     this.maxIrisThickness = 10;
-    this.eyeCount = 0;
+    this.eyeCount = eyeCount;
     // Color information
     this.eyeFill = 220;
     this.irisColor = irisColor;

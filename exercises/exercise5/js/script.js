@@ -26,6 +26,7 @@ let darkRoom = {
   }
 };
 
+
 // setup() creates the canvas and the eyes in the dark
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -40,8 +41,9 @@ function setup() {
       g: random(75, 200),
       b: random(75, 200),
     };
+    let eyeCount = darkRoom.numEyes;
     // NEW! Create a new eye
-    let eye = new Eye(x, y, size, irisColor);
+    let eye = new Eye(x, y, size, irisColor, eyeCount);
     // Add the eye to the array of eyes
     darkRoom.eyes.push(eye);
   }
@@ -86,14 +88,6 @@ function animation() {
     }
   }
 
-  // for (let i = 0; i < darkRoom.eyes.length; i++) {
-  //   let eye = darkRoom.eyes[i];
-  //   if (!eye.open) {
-  //   eye.grow();
-  //   eye.display();
-  //   }
-  // }
-
   for (let i = 0; i < darkRoom.lights1.length; i++) {
     let light = darkRoom.lights1[i];
     if (light.on) {
@@ -110,12 +104,6 @@ function animation() {
     }
   }
 
-  // for (let i = 0; i < darkRoom.lights1.length; i++) {
-  //   let light = darkRoom.lights1[i];
-  //   if (light.on) {
-  //     lightsOff();
-  //   }
-  // }
 
   for (let i = 0; i < darkRoom.lights2.length; i++) {
     let light = darkRoom.lights2[i];
@@ -125,12 +113,19 @@ function animation() {
       light.display();
     }
   }
-  // for (let i = 0; i < darkRoom.eyes.length; i++) {
-  //   let eye = darkRoom.eyes[i];
-  //     if (!eye.open) {
-  //       state = `lightsOff`
-  //     }
-  //   }
+
+  checkClosedEnding();
+}
+
+function checkClosedEnding() {
+  for (let i = 0; i < darkRoom.eyes.length; i++) {
+    let eye = darkRoom.eyes[i];
+    if (eye.open) {
+      return;
+    }
+  }
+
+  state = `lightsOff`;
 }
 
 function lightsOn() {
@@ -142,10 +137,28 @@ function lightsOn() {
       light.display();
       noLoop();
     }
+
+    for (let i = 0; i < darkRoom.lights2.length; i++) {
+      let light = darkRoom.lights2[i];
+      if (light.on) {
+        light.display();
+      }
+    }
+
+    textAlign(CENTER, CENTER);
+    fill(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
+    textSize(62);
+    textFont("Baloo");
+    text('PARTY ON!', width/2, height/2-50);
 }
 
 function lightsOff() {
-  background(255);
+  background(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
+  textAlign(CENTER, CENTER);
+  fill(220);
+  textSize(62);
+  textFont("Baloo");
+  text('LIGHTS OUT.', width/2, height/2-50);
 }
 
 function mousePressed() {
@@ -153,13 +166,6 @@ function mousePressed() {
     let eye = darkRoom.eyes[i];
     eye.mousePressed();
   }
-
-  // for (let i = 0; i < darkRoom.eyes.length; i++) {
-  //   let eye = darkRoom.eyes[i];
-  //   if (eye.eyeCount >= darkRoom.numEyes) {
-  //     state = `lightsOff`
-  //   }
-  // }
 }
 
 function windowResized() {

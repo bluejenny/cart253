@@ -5,12 +5,12 @@ class Light1 {
     this.x = x;
     this.y = y;
     this.size = 100;
-    this.maxSize = 500;
+    this.maxSize = 700;
     this.minSize = 100;
     this.vx = 0;
     this.vy = 0;
     this.speed = 5;
-    this.growRate = .3; // How much larger we get each frame
+    this.growRate = 1; // How much larger we get each frame
     this.jitteriness = 0.25; // How likely the Light is to change direction
     this.on = true; // The Light starts out on!
   }

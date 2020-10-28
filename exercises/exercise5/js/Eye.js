@@ -9,6 +9,7 @@ class Eye {
     this.maxSize = size;
     this.irisThickness = 10;
     this.maxIrisThickness = 10;
+    this.eyeCount = 0;
     // Color information
     this.eyeFill = 220;
     this.irisColor = irisColor;
@@ -17,32 +18,8 @@ class Eye {
       g: 0,
       b: 50
     };
-    this.alive = true;
+    this.open = true;
   }
-
-shrink() {
-
-  let shrinkage = random(0, 0.1);
-  this.size = this.size - shrinkage;
-  this.irisThickness = this.irisThickness - shrinkage/20;
-  // this.size = constrain(this.size, 30, this.maxSize);
-
-  if (this.size <= 30 ) {
-    this.alive = false;
-  }
-}
-
-grow() {
-  if (!this.alive) {
-  let growthRate = random(0, 0.1);
-  this.size += growthRate;
-  this.irisThickness += growthRate/20;
-  }
-
-  if (this.size >= this.maxSize || this.irisThickness >= this.maxIrisThickness) {
-    this.alive = true;
-  }
-}
 
 pollinate() {
   let growth = random(0, 0.05);
@@ -76,21 +53,7 @@ pollinate() {
   mousePressed() {
     let d = dist(this.x, this.y, mouseX, mouseY);
     if (d < this.size/2 + this.irisThickness) {
-      // this.irisThickness += - 1;
-      // this.eyeFill += 1;
-      if (this.x < width/2 && this.y < height/2) {
-        this.x += -random(0, 10);
-        this.y += -random(0, 10);
-      } else if (this.x < width/2 && this.y > height/2)  {
-        this.x += -random(0, 10);
-        this.y += random(0, 10);
-      } else if (this.x > width/2 && this.y < height/2) {
-        this.x += random(0, 10);
-        this.y += -random(0, 10);
-      } else if (this.x > width/2 && this.y > height/2) {
-        this.x += random(0, 10);
-        this.y += random(0, 10);
-      }
+      this.open = false;
     }
   }
 }

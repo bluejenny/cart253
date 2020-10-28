@@ -1,6 +1,3 @@
-let state = `animation`; // animation, lightsOn, LightsOut
-
-
 class Light1 {
 
   // constructor() sets up our starting properties
@@ -8,7 +5,8 @@ class Light1 {
     this.x = x;
     this.y = y;
     this.size = 100;
-    this.maxSize = 800;
+    this.maxSize = 500;
+    this.minSize = 100;
     this.vx = 0;
     this.vy = 0;
     this.speed = 5;
@@ -24,9 +22,19 @@ class Light1 {
     // Check if we're larger than the max size
     if (this.size > this.maxSize) {
       // If so, we're done for the night
-      this.on = false;
+      this.on = false
     }
   }
+
+  // shrink() {
+  //   // grow by reducing the size by a set amount
+  //   this.size = this.size + this.growRate;
+  //   // Check if we're larger than the max size
+  //   if (this.size > width) {
+  //     // If so, we're done for the night
+  //     noLoop();
+  //   }
+  // }
 
   // tryToPollinate(flower) {
   //   let d = dist(this.x, this.y, flower.x, flower.y);
@@ -69,12 +77,5 @@ class Light1 {
     ellipse(this.x, this.y, this.size);
     pop();
 
-  }
-
-  mousePressed() {
-    let d = dist(this.x, this.y, mouseX, mouseY);
-    if (d < this.size/2) {
-      this.on = false;
-    }
   }
 }

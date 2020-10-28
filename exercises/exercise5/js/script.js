@@ -4,6 +4,7 @@
 Ex. 5 Juggle in the Dark
 by JPoohachoff
 **************************************************/
+let state = `animation`; // animation, lightsOn, LightsOut
 
 // Our darkroom
 let darkRoom = {
@@ -16,6 +17,7 @@ let darkRoom = {
   lights2: [],
   //how many lights in the dark
   numLights: 40,
+  countLights : 0,
   // The color of the background
   bckgrnd: {
     r: 10,
@@ -44,9 +46,6 @@ function setup() {
     darkRoom.eyes.push(eye);
   }
 
-  // NEW! Sort the array using the sortByY() function
-  // darkRoom.eyes.sort(sortByY);
-
   // create the lights
   for (let i = 0; i < darkRoom.numLights; i++) {
     let light = new Light1(random(0, width), random(0, height));
@@ -59,51 +58,41 @@ function setup() {
   }
 }
 
-// sortByY() takes two eyes as parameters to compare
-// It should return a negative number if flower1 should come
-// BEFORE flower2 in the array, a positive number if flower1 should
-// come AFTER flower2 in the array, and 0 if there they have the
-// same priority
-// function sortByY(flower1, flower2) {
-//   // We achieve the above by subtracting flower2's y position
-//   // from flower1's! How elegant!
-//   return flower1.y - flower2.y;
-// }
-
 // draw()
 // Displays our eyes
 function draw() {
-  // Display the background
-  background(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
 
   if (state === `animation`) {
   animation();
   }
-  else if (state === `greenthumb`) {
-    greenthumb();
+  else if (state === `lightsOn`) {
+    lightsOn();
   }
-  else if (state === `deadplant`) {
-    deadplant();
+  else if (state === `lightsOff`) {
+    lightsOff();
   }
+
 }
 
 function animation() {
+  // Display the background
+  background(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
+
   // Loop through all the eyes in the array and display them
   for (let i = 0; i < darkRoom.eyes.length; i++) {
     let eye = darkRoom.eyes[i];
-    if (eye.alive) {
-    eye.grow();
+    if (eye.open) {
     eye.display();
     }
   }
 
-  for (let i = 0; i < darkRoom.eyes.length; i++) {
-    let eye = darkRoom.eyes[i];
-    if (!eye.alive) {
-    eye.grow();
-    eye.display();
-    }
-  }
+  // for (let i = 0; i < darkRoom.eyes.length; i++) {
+  //   let eye = darkRoom.eyes[i];
+  //   if (!eye.open) {
+  //   eye.grow();
+  //   eye.display();
+  //   }
+  // }
 
   for (let i = 0; i < darkRoom.lights1.length; i++) {
     let light = darkRoom.lights1[i];
@@ -111,15 +100,22 @@ function animation() {
       light.grow();
       light.move();
       light.display();
-
-      // for (let j = 0; j < darkRoom.eyes.length; j++) {
-      //   let eye = darkRoom.eyes[j];
-      //   if (eye.alive) {
-      //   light.tryToPollinate(eye);
-      //   }
-      // }
     }
   }
+
+  for (let i = 0; i < darkRoom.lights1.length; i++) {
+    let light = darkRoom.lights1[i];
+    if (light.size >= light.maxSize) {
+      state = `lightsOn`;
+    }
+  }
+
+  // for (let i = 0; i < darkRoom.lights1.length; i++) {
+  //   let light = darkRoom.lights1[i];
+  //   if (light.on) {
+  //     lightsOff();
+  //   }
+  // }
 
   for (let i = 0; i < darkRoom.lights2.length; i++) {
     let light = darkRoom.lights2[i];
@@ -127,15 +123,23 @@ function animation() {
       light.grow();
       light.move();
       light.display();
-
-      // for (let j = 0; j < darkRoom.eyes.length; j++) {
-      //   let eye = darkRoom.eyes[j];
-      //   if (eye.alive) {
-      //   light.tryToPollinate(eye);
-      //   }
-      // }
     }
   }
+}
+
+function lightsOn() {
+    background(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
+
+    for (let i = 0; i < darkRoom.lights1.length; i++) {
+      let light = darkRoom.lights1[i];
+      light.on = true;
+      light.display();
+      noLoop();
+    }
+}
+
+function lightsOff() {
+  background(255);
 }
 
 function mousePressed() {
@@ -143,16 +147,14 @@ function mousePressed() {
     let eye = darkRoom.eyes[i];
     eye.mousePressed();
   }
-  for (let i = 0; i < darkRoom.lights1.length; i++) {
-    let light = darkRoom.lights1[i];
-    light.mousePressed();
-  }
-  for (let i = 0; i < darkRoom.lights2.length; i++) {
-    let light = darkRoom.lights2[i];
-    light.mousePressed();
+
+  for (let i = 0; i < darkRoom.eyes.length; i++) {
+    let eye = darkRoom.eyes[i];
+    if (eye.eyeCount >= darkRoom.numEyes) {
+      state = `lightsOff`
+    }
   }
 }
-
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

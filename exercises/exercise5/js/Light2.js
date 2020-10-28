@@ -67,11 +67,4 @@ class Light2 {
     pop();
 
   }
-
-  mousePressed() {
-    let d = dist(this.x, this.y, mouseX, mouseY);
-    if (d < this.size) {
-      this.on = false;
-    }
-  }
 }

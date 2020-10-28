@@ -11,6 +11,10 @@ let garden = {
   flowers: [],
   // How many flowers in the garden
   numFlowers: 50,
+  // An array to store the individual bees
+  bees: [],
+  //how many bees in the garden
+  numBees: 7,
   // The color of the grass (background)
   grassColor: {
     r: 120,
@@ -42,6 +46,12 @@ function setup() {
 
   // NEW! Sort the array using the sortByY() function
   garden.flowers.sort(sortByY);
+
+  // create the bees
+  for (let i = 0; i < garden.numBees; i++) {
+    let bee = new Bee(random(0, width), random(0, height));
+    garden.bees.push(bee);
+  }
 }
 
 // sortByY() takes two flowers as parameters to compare
@@ -64,7 +74,26 @@ function draw() {
   // Loop through all the flowers in the array and display them
   for (let i = 0; i < garden.flowers.length; i++) {
     let flower = garden.flowers[i];
+    if (flower.alive) {
+    flower.shrink();
     flower.display();
+    }
+  }
+
+  for (let i = 0; i < garden.bees.length; i++) {
+    let bee = garden.bees[i];
+    if (bee.alive) {
+      bee.shrink();
+      bee.move();
+      bee.display();
+
+      for (let j = 0; j < garden.flowers.length; j++) {
+        let flower = garden.flowers[j];
+        if (flower.alive) {
+        bee.tryToPollinate(flower);
+        }
+      }
+    }
   }
 }
 

@@ -125,6 +125,12 @@ function animation() {
       light.display();
     }
   }
+  // for (let i = 0; i < darkRoom.eyes.length; i++) {
+  //   let eye = darkRoom.eyes[i];
+  //     if (!eye.open) {
+  //       state = `lightsOff`
+  //     }
+  //   }
 }
 
 function lightsOn() {
@@ -148,12 +154,12 @@ function mousePressed() {
     eye.mousePressed();
   }
 
-  for (let i = 0; i < darkRoom.eyes.length; i++) {
-    let eye = darkRoom.eyes[i];
-    if (eye.eyeCount >= darkRoom.numEyes) {
-      state = `lightsOff`
-    }
-  }
+  // for (let i = 0; i < darkRoom.eyes.length; i++) {
+  //   let eye = darkRoom.eyes[i];
+  //   if (eye.eyeCount >= darkRoom.numEyes) {
+  //     state = `lightsOff`
+  //   }
+  // }
 }
 
 function windowResized() {

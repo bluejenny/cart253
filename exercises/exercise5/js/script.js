@@ -149,7 +149,7 @@ function lightsOn() {
     fill(darkRoom.bckgrnd.r, darkRoom.bckgrnd.g, darkRoom.bckgrnd.b);
     textSize(62);
     textFont("Baloo");
-    text('PARTY ON!', width/2, height/2-50);
+    text('Don\'t go to bed.', width/2, height/2-50);
 }
 
 function lightsOff() {
@@ -158,7 +158,7 @@ function lightsOff() {
   fill(220);
   textSize(62);
   textFont("Baloo");
-  text('LIGHTS OUT.', width/2, height/2-50);
+  text('Don\'t stay awake\nfor too long.', width/2, height/2-50);
 }
 
 function mousePressed() {

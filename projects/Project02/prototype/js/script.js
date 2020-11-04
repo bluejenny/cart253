@@ -16,44 +16,22 @@
 // will be keys in accessing
 // the ending/exit animation
 
-
+//darker background behind animation to make it appear as if getting darker
 let bgDark = {
   r: 48,
   g: 65,
   b: 79
 }
 
+//sky bacground, opacity fades as mouseY moves down
 let bgLight = {
   r: 202,
   g: 225,
   b: 244
 }
 
+//for the ice crystals
 let hex = {
-  x: 0,
-  y: 0,
-  fill: 255,
-  size: 10,
-  speed: .01
-}
-
-let hex2 = {
-  x: 0,
-  y: 0,
-  fill: 255,
-  size: 10,
-  speed: .01
-}
-
-let hex3 = {
-  x: 0,
-  y: 0,
-  fill: 255,
-  size: 10,
-  speed: .01
-}
-
-let hex4 = {
   x: 0,
   y: 0,
   fill: 255,
@@ -136,6 +114,18 @@ function keyPressed() {
 
 }
 
+function animation() {
+  sky();
+  landscape();
+  landscapeMovingLine();
+  fallingSnow();
+
+  push();
+  fill(56, 124, 96);
+  triangle(200, height-75, 300, height-400, 400, height-75);
+  pop();
+}
+
 function title() {
   //  title slide
   push();
@@ -155,17 +145,6 @@ function title() {
   pop();
 
   landscape();
-}
-
-function animation() {
-  sky();
-  landscape();
-  landscapeMovingLine();
-  fallingSnow();
-
-  // if (mouseY > height/3*2) {
-  //   state = `ending`;
-  // }
 }
 
 function ending() {
@@ -460,22 +439,22 @@ function iceCrystals() {
   for (let i = 0; i < 1; i++) {
 
     //circle top right
-    hex2.fill = random(200, 255);
-    hex2.size = random(0, 40);
-    hex2.x = random(mouseX, width);
-    hex2.y = random(0, mouseY);
-    fill(hex2.fill);
-    hex.x = hex2.x + hex2.speed;
-    hexagon(hex2.x, hex2.y, hex2.size);
+    hex.fill = random(200, 255);
+    hex.size = random(0, 40);
+    hex.x = random(mouseX, width);
+    hex.y = random(0, mouseY);
+    fill(hex.fill);
+    hex.x = hex.x + hex.speed;
+    hexagon(hex.x, hex.y, hex.size);
 
     //circle bottom left
-    hex3.fill = random(200, 255);
-    hex3.size = random(0, 30);
-    hex3.x = random(0, mouseX);
-    hex3.y = random(height, mouseY);
-    fill(hex3.fill);
-    hex3.x = hex3.x + hex3.speed;
-    hexagon(hex3.x, hex3.y, hex3.size);
+    hex.fill = random(200, 255);
+    hex.size = random(0, 30);
+    hex.x = random(0, mouseX);
+    hex.y = random(height, mouseY);
+    fill(hex.fill);
+    hex.x = hex.x + hex.speed;
+    hexagon(hex.x, hex.y, hex.size);
   }
 }
 
@@ -492,13 +471,13 @@ function iceCrystals2() {
     hexagon(hex.x, hex.y, hex.size);
 
     //circle bottom right
-    hex4.fill = random(200, 255);
-    hex4.size = random(0, 20);
-    hex4.x = random(mouseX, width);
-    hex4.y = random(height, mouseY);
-    fill(hex4.fill);
-    hex4.x = hex4.x + hex4.speed;
-    hexagon(hex4.x, hex4.y, hex4.size);
+    hex.fill = random(200, 255);
+    hex.size = random(0, 20);
+    hex.x = random(mouseX, width);
+    hex.y = random(height, mouseY);
+    fill(hex.fill);
+    hex.x = hex.x + hex.speed;
+    hexagon(hex.x, hex.y, hex.size);
   }
 }
 

@@ -76,7 +76,7 @@ let aSFX;
 function preload() {
     halo = loadImage('assets/images/halo.png');
     yay = loadImage('assets/images/yay.png');
-    aSFX = loadSound(`assets/sounds/a-sigh.mp3`);
+    aSFX = loadSound(`assets/sounds/A-sigh.mp3`);
   }
 
 

@@ -59,14 +59,24 @@ let size = 20;
 //rainbow graphic
 var X = 0;
 
-//halo
-let img;
+//images for key pressed
+let halo;
+let yay;
+let yayX = -150;
+let yayY = 50;
+let yaySpeed = 50;
 
 let state = `animation`; // possible states are title, animation and ending
 
+//sound effects for key pressed
+let aSFX;
+
+
 
 function preload() {
-    img = loadImage('assets/images/halo.png');
+    halo = loadImage('assets/images/halo.png');
+    yay = loadImage('assets/images/yay.png');
+    aSFX = loadSound(`assets/sounds/a-sigh.mp3`);
   }
 
 
@@ -110,8 +120,18 @@ function draw() {
 
 }
 
-function keyPressed() {
+function mouseClicked() {
 
+    if (yayX > width*2) {
+      yayX = -500;
+    }
+    else {
+      yayX += yaySpeed;
+    }
+}
+
+function keyPressed() {
+  aSFX.play();
 }
 
 function animation() {
@@ -122,8 +142,10 @@ function animation() {
 
   push();
   fill(56, 124, 96);
-  triangle(200, height-75, 300, height-400, 400, height-75);
+  triangle(190, height-75, 300, height-400, 410, height-75);
+  image(yay, yayX, yayY);
   pop();
+
 }
 
 function title() {
@@ -331,11 +353,6 @@ function sky() {
 
 
   if (mouseIsPressed && X > 10) {
-    // if (size > width) {
-    //   size =10;
-    // }else {
-    //   size += 10;
-    // }
     push();
     fill(random(200, 255), 200);
     noStroke();
@@ -343,9 +360,8 @@ function sky() {
 
     //sundog circle
     imageMode(CENTER);
-    image(img, radius, radius);
-    img.resize(150, 0);
-    img.resize(150, 0);
+    image(halo, radius, radius);
+    halo.resize(150, 0);
     pop();
   }
   pop();

@@ -1,38 +1,38 @@
 "use strict";
 
 /**************************************************
-06 - Sound
+10 - More Sound Oscillator
 with Pippin Barr
 **************************************************/
 
-let barkSFX;
-let sighSFX;
-
-
-function preload() {
-  barkSFX = loadSound(`assets/sounds/bark.wav`);
-  sighSFX = loadSound(`assets/sounds/sigh.wav`);
-}
+let osclr;
+let t = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   userStartAudio();
-}
 
+  osclr = new p5.Oscillator(440, `sine`);
+}
 
 function draw() {
   background(0);
 
-  let newRate = map(mouseX, 0, width, -3, 3);
-  barkSFX.rate(newRate);
+  let noiseValue = noise(t);
+
+  let newFreq = map(mouseY, height, 0, 0, 880);
+  osclr.freq(newFreq);
+
+  let newAmp = map(mouseX, 0, width, 0, 1);
+  osclr.amp(newAmp);
 }
 
 function mousePressed() {
-  barkSFX.loop();
+  osclr.start();
 }
 
-function keyPressed() {
-  sighSFX.play();
+function mouseReleased() {
+  osclr.stop();
 }
 
 function windowResized() {

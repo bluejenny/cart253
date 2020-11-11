@@ -8,7 +8,6 @@ with Pippin Barr
 let barkSFX;
 let sighSFX;
 
-
 function preload() {
   barkSFX = loadSound(`assets/sounds/bark.wav`);
   sighSFX = loadSound(`assets/sounds/sigh.wav`);

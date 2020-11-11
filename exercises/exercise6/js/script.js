@@ -25,10 +25,31 @@ let circles = [];
 // F-minor
 let notes = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
 
+let windSFX;
+let sighSFX;
+let sigh2SFX
+let snowSFX;
+
+let synth, soundLoop;
+let notePattern = [60, 62, 64, 67, 69, 72];
+
+// if loop is playing, set to true
+let loopIsPlaying = false;
+
+function preload() {
+  windSFX = loadSound(`assets/sounds/wind-1.mp3`);
+  sighSFX = loadSound(`assets/sounds/A-sigh.mp3`);
+  sigh2SFX = loadSound(`assets/sounds/sigh.wav`);
+  snowSFX = loadSound(`assets/sounds/snow.mp3`);
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   // userStartAudio();
+  let intervalInSeconds = 0.2;
+   soundLoop = new p5.SoundLoop(onSoundLoop, intervalInSeconds);
+   synth = new p5.MonoSynth();
 }
 
 function draw() {
@@ -79,7 +100,7 @@ function displayMarkers() {
   );
   line((width / 6) * 5, height / 2 - 205, (width / 6) * 5, height / 2 - 195);
 
-  // example of points where sound will play --> center line
+  // example of points where sound/animation will start --> center line
   line(width / 2 - 5, height / 2, width / 2 + 5, height / 2);
   line(width / 2, height / 2 - 5, width / 2, height / 2 + 5);
 
@@ -89,7 +110,7 @@ function displayMarkers() {
   line((width / 6) * 5 - 5, height / 2, (width / 6) * 5 + 5, height / 2);
   line((width / 6) * 5, height / 2 - 5, (width / 6) * 5, height / 2 + 5);
 
-  // example of points where sound will play --> bottom line
+  // example of points where sound will be activated --> bottom line
   line(width / 2 - 5, height / 2 + 200, width / 2 + 5, height / 2 + 200);
   line(width / 2, height / 2 + 205, width / 2, height / 2 + 195);
 
@@ -105,10 +126,55 @@ function displayMarkers() {
   line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
   pop();
 }
+
+function onSoundLoop(timeFromNow) {
+  let noteIndex = (soundLoop.iterations - 1) % notePattern.length;
+  let note = midiToFreq(notePattern[noteIndex]);
+  synth.play(note, 0.5, timeFromNow);
+}
+
 function mousePressed() {
+  //first row
+
+  if (
+    mouseX >= width / 6 - 5 &&
+    mouseX <= width / 6 + 5 &&
+    mouseY > height / 2 - 205 &&
+    mouseY < height / 2 - 195
+  ) {
+    if (loopIsPlaying) {
+      windSFX.stop();
+      sighSFX.stop();
+      loopIsPlaying = false;
+    } else {
+    windSFX.loop();
+    loopIsPlaying = true;
+    }
+  }
+
   if (
     mouseX >= width / 2 - 5 &&
     mouseX <= width / 2 + 5 &&
+    mouseY > height / 2 - 205 &&
+    mouseY < height / 2 - 195
+  ) {
+    sighSFX.play();
+  }
+
+  if (
+    mouseX >= (width / 6) * 5 - 5 &&
+    mouseX <= (width / 6) * 5 + 5 &&
+    mouseY > height / 2 - 205 &&
+    mouseY < height / 2 - 195
+  ) {
+    windSFX.play();
+  }
+
+  //middle row
+
+  if (
+    mouseX >= width / 6 - 5 &&
+    mouseX <= width / 6 + 5 &&
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
   ) {
@@ -116,8 +182,8 @@ function mousePressed() {
   }
 
   if (
-    mouseX >= width / 6 - 5 &&
-    mouseX <= width / 6 + 5 &&
+    mouseX >= width / 2 - 5 &&
+    mouseX <= width / 2 + 5 &&
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
   ) {
@@ -132,6 +198,47 @@ function mousePressed() {
   ) {
     createCircle(mouseX, mouseY);
   }
+
+// bottom row
+if (
+  mouseX >= width / 6 - 5 &&
+  mouseX <= width / 6 + 5 &&
+  mouseY > height / 2 + 195 &&
+  mouseY < height / 2 + 205
+) {
+  if (loopIsPlaying) {
+    snowSFX.stop();
+    loopIsPlaying = false;
+  } else {
+  snowSFX.loop();
+  loopIsPlaying = true;
+  }
+}
+
+if (
+  mouseX >= width / 2 - 5 &&
+  mouseX <= width / 2 + 5 &&
+  mouseY > height / 2 + 195 &&
+  mouseY < height / 2 + 205
+) {
+  sigh2SFX.play();
+}
+
+if (
+  mouseX >= (width / 6) * 5 - 5 &&
+  mouseX <= (width / 6) * 5 + 5 &&
+  mouseY > height / 2 + 195 &&
+  mouseY < height / 2 + 205
+) {
+  if (soundLoop.isPlaying) {
+    soundLoop.stop();
+  } else {
+    // start the loop
+    soundLoop.start();
+  }
+}
+
+
 }
 
 function createCircle(x, y) {

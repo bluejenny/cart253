@@ -3,23 +3,31 @@
 /**************************************************
 Exercise 6: Make Some Noise
 Jen Poohachoff
+
+This is a prototype of how I plan to use sound in
+my final project. I will map sounds to certain areas
+that will respond in different ways. I would like to use
+computer generated sounds for animated object. For other
+sounds the user will decide whether or not they are played.
+Some sound will be activated by certain key being pressed, for
+example like when you press 'a'
 **************************************************/
 
-//darker background behind animation to make it appear as if getting darker
+//dark bckgrnd behind simulation
 let bgDark = {
   r: 48,
   g: 65,
   b: 79,
 };
 
-//sky bacground, opacity fades as mouseY moves down
+//lighter bacground, opacity fades as mouseY moves down
 let bgLight = {
   r: 202,
   g: 225,
   b: 244,
 };
 
-// the circles
+// the animated circles
 let circles = [];
 
 // F-minor
@@ -27,11 +35,15 @@ let notes = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
 
 let windSFX;
 let sighSFX;
-let sigh2SFX
+let sigh2SFX;
 let snowSFX;
 
-let synth, soundLoop;
-let notePattern = [60, 62, 64, 67, 69, 72];
+let synth;
+let soundLoop;
+let notePattern = [80, 82, 84, 87, 89, 92];
+
+let synthPoly;
+let interval;
 
 // if loop is playing, set to true
 let loopIsPlaying = false;
@@ -48,8 +60,9 @@ function setup() {
 
   // userStartAudio();
   let intervalInSeconds = 0.2;
-   soundLoop = new p5.SoundLoop(onSoundLoop, intervalInSeconds);
-   synth = new p5.MonoSynth();
+  soundLoop = new p5.SoundLoop(onSoundLoop, intervalInSeconds);
+  synth = new p5.MonoSynth();
+  synthPoly = new p5.PolySynth();
 }
 
 function draw() {
@@ -130,11 +143,13 @@ function displayMarkers() {
 function onSoundLoop(timeFromNow) {
   let noteIndex = (soundLoop.iterations - 1) % notePattern.length;
   let note = midiToFreq(notePattern[noteIndex]);
-  synth.play(note, 0.5, timeFromNow);
+  synth.play(note, 0.025, timeFromNow);
 }
 
 function mousePressed() {
   //first row
+
+  userStartAudio();
 
   if (
     mouseX >= width / 6 - 5 &&
@@ -147,8 +162,8 @@ function mousePressed() {
       sighSFX.stop();
       loopIsPlaying = false;
     } else {
-    windSFX.loop();
-    loopIsPlaying = true;
+      windSFX.loop();
+      loopIsPlaying = true;
     }
   }
 
@@ -199,46 +214,60 @@ function mousePressed() {
     createCircle(mouseX, mouseY);
   }
 
-// bottom row
-if (
-  mouseX >= width / 6 - 5 &&
-  mouseX <= width / 6 + 5 &&
-  mouseY > height / 2 + 195 &&
-  mouseY < height / 2 + 205
-) {
-  if (loopIsPlaying) {
-    snowSFX.stop();
-    loopIsPlaying = false;
-  } else {
-  snowSFX.loop();
-  loopIsPlaying = true;
+  // bottom row
+  if (
+    mouseX >= width / 6 - 5 &&
+    mouseX <= width / 6 + 5 &&
+    mouseY > height / 2 + 195 &&
+    mouseY < height / 2 + 205
+  ) {
+    if (loopIsPlaying) {
+      snowSFX.stop();
+      loopIsPlaying = false;
+    } else {
+      snowSFX.loop();
+      loopIsPlaying = true;
+    }
+  }
+
+  if (
+    mouseX >= width / 2 - 5 &&
+    mouseX <= width / 2 + 5 &&
+    mouseY > height / 2 + 195 &&
+    mouseY < height / 2 + 205
+  ) {
+    // check to see if playing
+    if (interval === undefined) {
+      // Start interval, calling playRandomNote every 100 milliseconds
+      interval = setInterval(playRandomNote, 100);
+    } else {
+      // stop play
+      clearInterval(interval);
+      interval = undefined;
+    }
+  }
+
+  if (
+    mouseX >= (width / 6) * 5 - 5 &&
+    mouseX <= (width / 6) * 5 + 5 &&
+    mouseY > height / 2 + 195 &&
+    mouseY < height / 2 + 205
+  ) {
+    if (soundLoop.isPlaying) {
+      soundLoop.stop();
+    } else {
+      // start the loop
+      soundLoop.start();
+    }
   }
 }
 
-if (
-  mouseX >= width / 2 - 5 &&
-  mouseX <= width / 2 + 5 &&
-  mouseY > height / 2 + 195 &&
-  mouseY < height / 2 + 205
-) {
-  sigh2SFX.play();
-}
-
-if (
-  mouseX >= (width / 6) * 5 - 5 &&
-  mouseX <= (width / 6) * 5 + 5 &&
-  mouseY > height / 2 + 195 &&
-  mouseY < height / 2 + 205
-) {
-  if (soundLoop.isPlaying) {
-    soundLoop.stop();
-  } else {
-    // start the loop
-    soundLoop.start();
-  }
-}
-
-
+// playRandomNote() plays a random note
+function playRandomNote() {
+  // Chose a random note
+  let note = random(notes);
+  // Play it
+  synth.play(note, 1, 0, 1);
 }
 
 function createCircle(x, y) {
@@ -247,7 +276,12 @@ function createCircle(x, y) {
   circles.push(circle);
 }
 
-function keyPressed() {}
+// example of a key pressed sound
+function keyPressed() {
+  if (key === "a") {
+    sigh2SFX.play();
+  }
+}
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

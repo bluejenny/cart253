@@ -1,35 +1,17 @@
-"use strict";
+class Snowflake {
+  constructor(x, y) {
+    ths.x: x,
+    this.y: y,
+    this.size: 15,
+    this.angle: 0, // Facing right to start
+    this.speed: 0, // Start out not moving
+    this.maxSpeed: 10, // Moving at 5 pixels per frame
+    this.acceleration: 0.1, // How much velocity is gained when accelerating
+    this.braking: -0.5, // How much velocity is lost when breaking
+    this.drag: -0.05 // How much velocity is lost when neither accelerating nor braking
+  }
 
-/**************************************************
-09 - Movement with Polar Coordinates
-**************************************************/
-let circle = {
-  x: 300,
-  y: 300,
-  size: 15,
-  angle: 0, // Facing right to start
-  speed: 0, // Start out not moving
-  maxSpeed: 10, // Moving at 5 pixels per frame
-  acceleration: 0.1, // How much velocity is gained when accelerating
-  braking: -0.5, // How much velocity is lost when breaking
-  drag: -0.05 // How much velocity is lost when neither accelerating nor braking
-};
-
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-
-}
-
-function draw() {
-  background(0);
-
-  handleInput();
-  move();
-  wrap();
-  display();
-}
-
-function handleInput() {
+  function handleInput() {
   if (keyIsDown(LEFT_ARROW)) {
     // Turn LEFT if the LEFT arrow is pressed
     circle.angle -= 0.05;
@@ -91,27 +73,10 @@ function display() {
   // Then rotate by its angle
   rotate(circle.angle);
 
-  // Then draw a rectangle that sticks out to the "right" of the circle, which
-  // is the direction it faces by default
-  // rectMode(CENTER);
-  // rect(circle.size / 2, 0, circle.size / 2, circle.size / 10);
-  // fill(125);
-  // triangle(-20, -5, 0, 25, 90, 0);
-  // fill(175);
-  // triangle(0, 60, 0, 25, 90, 0);
-
-  fill(150);
-  triangle(-20, -20, 0, 0, 100, -30);
-  fill(175);
-  triangle(35, 35, 0, 0, 100, -30);
-  fill(125);
-  triangle(0, 30, 0, 0, 22, 22);
-  // Draw the circle (at 0,0 because we translated)
-  // fill(200, 40, 100);
-  // ellipse(75, 0, circle.size);
+  // display shapes for the snowflake
+  triangle(-10, -40, 0, 20, 80, 0);
+  fill(174);
+  triangle(-40, -20, 0, 20, 80, 0);
   pop();
 }
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
 }

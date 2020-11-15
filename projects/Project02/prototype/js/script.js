@@ -1,5 +1,6 @@
 
-// Project 2 Protype
+// Project 2
+// Daydreamer to the nth Degree
 // Jen Poohachoff
 
 // **********************************************
@@ -19,6 +20,8 @@
 // found along the way and
 // will be keys in accessing
 // the ending/exit animation
+
+
 
 //darker background behind animation to make it appear as if getting darker
 let bgDark = {

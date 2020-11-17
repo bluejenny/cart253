@@ -1,21 +1,13 @@
 "use strict";
 
 // Project 2
-// Daydreamer to the nth Degree
 // Jen Poohachoff
 
-// **********************************************
-//
-//   _  /   /
-//  |_ _   _  ._ o  _     _| / |_| o     _  ._
-//  | (/_ (/_ |  | (/_   (_|   | | | \/ (/_ |
-//
-// **********************************************
 
 // The opposite of doom scrolling
-// a endless scenario that takes
+// an endless scenario that takes
 // you away to other places
-// untill such time you are called background
+// untill such time you are called back
 // to reality
 
 

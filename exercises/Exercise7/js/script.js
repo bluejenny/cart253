@@ -1,6 +1,6 @@
 "use strict";
 
-// Project 2
+// Exercise 7 : Project 2 Update
 // Jen Poohachoff
 
 

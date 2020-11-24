@@ -15,11 +15,10 @@
 // The opposite of doom scrolling
 // a endless scenario that takes
 // you away to other places
-// untill such time you are called background
-// to reality
+// untill such time you are called
+// back to reality
 
-
-let state = `room`  // states are room, leftWorld, topWorld, rightWorld, bottomWorld
+let state = `room`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
 
 //dark bckgrnd behind simulation
 let bgDark = {
@@ -29,11 +28,11 @@ let bgDark = {
 };
 
 //sky bacground, opacity fades as mouseY moves down
-let bgLight = {
-  r: 202,
-  g: 225,
-  b: 244
-}
+// let bgLight = {
+//   r: 202,
+//   g: 225,
+//   b: 244
+// }
 
 // the animated circles
 let circles = [];
@@ -47,21 +46,27 @@ let airplane = {
   maxSpeed: 10, // Moving at 5 pixels per frame
   acceleration: 0.1, // How much velocity is gained when accelerating
   braking: -0.5, // How much velocity is lost when breaking
-  drag: -0.05 // How much velocity is lost when neither accelerating nor braking
+  drag: -0.05, // How much velocity is lost when neither accelerating nor braking
 };
 
+let bottomrightMarker = false;
+
 // F-minor
-let notes = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
+let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
+
+// random
+let notesD = [`D4`, `E4`, `F4`, `G4`, `A4`, `Bb5`, `C4`, `D4`];
 
 let windSFX;
 let sighSFX;
 let sigh2SFX;
 let snowSFX;
+let walkinparkSFX;
 
 let synth;
 let soundLoop;
 // let notePattern = [80, 82, 84, 87, 89, 92];
-let notePattern = [60, 72, 67, 64, 72, 80 ];
+let notePattern = [60, 72, 67, 64, 72, 80];
 
 let synthPoly;
 let interval;
@@ -74,6 +79,7 @@ function preload() {
   sighSFX = loadSound(`assets/sounds/A-sigh.mp3`);
   sigh2SFX = loadSound(`assets/sounds/sigh.wav`);
   snowSFX = loadSound(`assets/sounds/snow.mp3`);
+  walkinparkSFX = loadSound(`assets/sounds/walk-in-the-park.wav`);
 }
 
 function setup() {
@@ -100,8 +106,8 @@ function setup() {
 }
 
 function centerAirplane() {
-  airplane.x = width/2-30;
-  airplane.y = height/2;
+  airplane.x = width / 2 - 30;
+  airplane.y = height / 2;
   airplane.angle = 0; // Facing right to start
 }
 
@@ -110,23 +116,18 @@ function draw() {
 
   if (state === `room`) {
     room();
-  }
-  else if (state === `leftWorld`) {
+    drawCursor();
+  } else if (state === `leftWorld`) {
     leftWorld();
-  }
-  else if (state === `rightWorld`) {
+  } else if (state === `rightWorld`) {
     rightWorld();
-  }
-  else if (state === `topWorld`) {
+  } else if (state === `topWorld`) {
     topWorld();
-  }
-  else if (state === `bottomWorld`) {
+  } else if (state === `bottomWorld`) {
     bottomWorld();
   }
 
-  // cursor
-  line(mouseX - 5, mouseY, mouseX + 5, mouseY);
-  line(mouseX, mouseY - 5, mouseX, mouseY + 5);
+
 
   // airplane
   handleInput();
@@ -134,10 +135,9 @@ function draw() {
   wrap();
   displayAirplane();
 
-
   // show + where user can click
+  checkMarkers();
   displayMarkers();
-
 
   for (let i = 0; i < circles.length; i++) {
     let circle = circles[i];
@@ -146,47 +146,77 @@ function draw() {
   }
 }
 
+function drawCursor() {
+  // cursor
+  line(mouseX - 5, mouseY, mouseX + 5, mouseY);
+  line(mouseX, mouseY - 5, mouseX, mouseY + 5);
+}
+
 function resetMouse() {
-  mouseX = width/2;
-  mouseY = height/2;
+  mouseX = width / 2;
+  mouseY = height / 2;
 }
 
 function parkAirplane() {
-  airplane.x = width/6*5;
-  airplane.y = height/2 + 200;
+  airplane.x = (width / 6) * 5 - 30;
+  airplane.y = height / 2 + 200;
   airplane.angle = 0;
 }
 
+function drawController(x, y) {
+  push();
+  noStroke();
+  fill(50, 100);
+  //bottom
+  triangle(x - 8, y + 45, x + 8, y + 45, x, y + 55);
+  //top
+  triangle(x - 8, y - 45, x + 8, y - 45, x, y - 55);
+  //left
+  triangle(x - 55, y - 8, x - 55, y + 8, x - 65, y);
+  //right
+  triangle(x + 55, y - 8, x + 55, y + 8, x + 65, y);
+  pop();
+}
+
 function room() {
+  // drawCursor();
   drawRoom();
+  drawController(width / 2, height / 2);
 }
 
 function leftWorld() {
   backgroundFade(255, 200, 255);
+  drawSun();
   displayLandscape();
+  drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function rightWorld() {
   backgroundFade(202, 225, 245);
+  drawSun();
   displayLandscape();
+  drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function topWorld() {
+  drawCursor();
   backgroundFade(245, 225, 244);
-  displayLandscape();
+  // displayLandscape();
+  drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function bottomWorld() {
+  drawCursor();
   backgroundFade(48, 65, 79);
-  displayLandscape();
+  // displayLandscape();
+  drawController((width / 6) * 5, height / 2 + 200);
 }
-
 
 // creates effect of canvas getting lighter or darker
 // based on mouseY position, 0 = light, height = dark
 
 function backgroundFade(r, g, b) {
-  let m = map(mouseY, 0, height, 235, 0);
+  let m = map(mouseY, 0, height, 255, 0);
   fill(r, g, b, m);
   rect(0, 0, width, height); //light sky
 }
@@ -199,20 +229,25 @@ function drawRoom() {
   rect(0, 0, width, height); // room background
 
   // top diagonal lines
-  line(0, 0, width/2-width/3, 100);
-  line(width, 0, width/2+width/3, 100);
+  line(0, 0, width / 2 - width / 3, 100);
+  line(width, 0, width / 2 + width / 3, 100);
 
   // bottom diagonal lines
-  line(0, height-50, width/2-width/3, height-150);
-  line(width, height-50, width/2+width/3, height-150);
+  line(0, height - 50, width / 2 - width / 3, height - 150);
+  line(width, height - 50, width / 2 + width / 3, height - 150);
 
   // top and bottom horizonatal line
-  line(width/2-width/3, 100, width/2+width/3, 100);
-  line(width/2-width/3, height-150, width/2+width/3, height-150);
+  line(width / 2 - width / 3, 100, width / 2 + width / 3, 100);
+  line(
+    width / 2 - width / 3,
+    height - 150,
+    width / 2 + width / 3,
+    height - 150
+  );
 
   // left and right vertical line
-  line(width/2-width/3, 100, width/2-width/3, height-150);
-  line(width/2+width/3, 100, width/2+width/3, height-150);
+  line(width / 2 - width / 3, 100, width / 2 - width / 3, height - 150);
+  line(width / 2 + width / 3, 100, width / 2 + width / 3, height - 150);
 
   // screen
   // fill(225, o);
@@ -220,46 +255,86 @@ function drawRoom() {
   pop();
 }
 
+function drawSun() {
+  push();
+  stroke(random(175, 245));
+  ellipseMode(CENTER);
+
+  let points = 16; //number of points
+  let pointAngle = 360 / points; //angle between points
+  let radius = width / 2; //length of each line from centre to edge of circle
+
+  //check to see if on mobile screen (vertical)
+  if (width / 2 < height / 2) {
+    radius = height / 2;
+  }
+
+  for (let angle = 270; angle < 630; angle = angle + pointAngle) {
+    let x = cos(radians(angle)) * radius; //convert angle to radians for x and y coordinates
+    let y = sin(radians(angle)) * radius;
+    line(mouseX, mouseY, mouseX + x, mouseY + y);
+  }
+  pop();
+}
+
 function displayLandscape() {
   push();
+
   //bckgrnd mts
   let opacity = map(mouseY, 0, height, 200, 50);
   fill(87, 97, 109, opacity);
   stroke(255, opacity);
 
   // mtns back
-  triangle(mouseX-width/8, 2*height/3+20, 0, height/3-100, 0, height);
-  triangle(mouseX+width/8, 2*height/3+20, width, height/3-100, width, height);
+  triangle(mouseX - width / 8, (2 * height) / 3 + 20, 0, height / 3 - 100, 0, height);
+  triangle(mouseX + width / 8, (2 * height) / 3 + 20, width, height / 3 - 100, width, height);
 
   // mtns front
   fill(87, 97, 109);
-  triangle(mouseX+30, 2*height/3, 0, height/2-30, 0, height-100);
-  triangle(mouseX-30, 2*height/3, width, height/2-50, width, height-100);
+  triangle(mouseX + 30, (2 * height) / 3, 0, height / 2 - 30, 0, height - 100);
+  triangle(
+    mouseX - 30,
+    (2 * height) / 3,
+    width,
+    height / 2 - 50,
+    width,
+    height - 100
+  );
 
   fill(77, 87, 99);
-  triangle(mouseX-10, 2*height/3, 0, height/2+55, 0, height);
-  triangle(mouseX+10, 2*height/3, width, height/2+55, width, height);
+  triangle(mouseX - 10, (2 * height) / 3, 0, height / 2 + 55, 0, height);
+  triangle(
+    mouseX + 10,
+    (2 * height) / 3,
+    width,
+    height / 2 + 55,
+    width,
+    height
+  );
 
   //land
   fill(142, 163, 180, 220);
-  rect(0, 2*height/3, width, height/2);
+  rect(0, (2 * height) / 3, width, height / 2);
   pop();
 }
 
 function displayMarkers() {
   //displays a graph of + markers to show user where to click
   push();
-  let m = map(mouseY, 0, height, 235, 0);
-  strokeWeight(1);
-  stroke(47, m);
 
-  // example of points where sound will play --> top line
+  // markers
+
+  //top
+
+  //top-left
   line(width / 2 - 5, height / 2 - 200, width / 2 + 5, height / 2 - 200);
   line(width / 2, height / 2 - 205, width / 2, height / 2 - 195);
 
+  //top-middle
   line(width / 6 - 5, height / 2 - 200, width / 6 + 5, height / 2 - 200);
   line(width / 6, height / 2 - 205, width / 6, height / 2 - 195);
 
+  //top-right
   line(
     (width / 6) * 5 - 5,
     height / 2 - 200,
@@ -268,31 +343,49 @@ function displayMarkers() {
   );
   line((width / 6) * 5, height / 2 - 205, (width / 6) * 5, height / 2 - 195);
 
-  // example of points where sound/animation will start --> center line
+  // middle line
+
+  // middle left
   line(width / 2 - 5, height / 2, width / 2 + 5, height / 2);
   line(width / 2, height / 2 - 5, width / 2, height / 2 + 5);
 
+  //middle center
   line(width / 6 - 5, height / 2, width / 6 + 5, height / 2);
   line(width / 6, height / 2 - 5, width / 6, height / 2 + 5);
 
+  // middle right
   line((width / 6) * 5 - 5, height / 2, (width / 6) * 5 + 5, height / 2);
   line((width / 6) * 5, height / 2 - 5, (width / 6) * 5, height / 2 + 5);
 
-  // example of points where sound will be activated --> bottom line
+  // bottom line
+
+  // bottom left
   line(width / 2 - 5, height / 2 + 200, width / 2 + 5, height / 2 + 200);
   line(width / 2, height / 2 + 205, width / 2, height / 2 + 195);
 
+  // bottom middle
   line(width / 6 - 5, height / 2 + 200, width / 6 + 5, height / 2 + 200);
   line(width / 6, height / 2 + 205, width / 6, height / 2 + 195);
 
-  line(
-    (width / 6) * 5 - 5,
-    height / 2 + 200,
-    (width / 6) * 5 + 5,
-    height / 2 + 200
-  );
-  line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
+  // bottom right
+  // noFill();
+  // noStroke();
+  // ellipse(width / 6 * 5, height / 2 + 200, 80);
+  // line((width / 6) * 5 - 5, height / 2 + 200, (width / 6) * 5 + 5, height / 2 + 200);
+  // line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
   pop();
+}
+
+function checkMarkers() {
+  // bottom right
+  if (
+    mouseX >= (width / 6) * 5 - 5 &&
+    mouseX <= (width / 6) * 5 + 5 &&
+    mouseY > height / 2 + 195 &&
+    mouseY < height / 2 + 205
+  ) {
+    bottomrightMarker = true;
+  }
 }
 
 function onSoundLoop(timeFromNow) {
@@ -313,11 +406,10 @@ function mousePressed() {
     mouseY < height / 2 - 195
   ) {
     if (loopIsPlaying) {
-      windSFX.stop();
-      sighSFX.stop();
+      walkinparkSFX.stop();
       loopIsPlaying = false;
     } else {
-      windSFX.loop();
+      walkinparkSFX.loop();
       loopIsPlaying = true;
     }
   }
@@ -403,12 +495,7 @@ function mousePressed() {
     }
   }
 
-  if (
-    mouseX >= (width / 6) * 5 - 5 &&
-    mouseX <= (width / 6) * 5 + 5 &&
-    mouseY > height / 2 + 195 &&
-    mouseY < height / 2 + 205
-  ) {
+  if (bottomrightMarker) {
     if (soundLoop.isPlaying) {
       soundLoop.stop();
     } else {
@@ -422,13 +509,13 @@ function mousePressed() {
 // playRandomNote() plays a random note
 function playRandomNote() {
   // Chose a random note
-  let note = random(notes);
+  let note = random(notesF);
   // Play it
   synth.play(note, 1, 0, 1);
 }
 
 function createCircle(x, y) {
-  let note = random(notes);
+  let note = random(notesD);
   let circle = new Circle(x, y, note);
   circles.push(circle);
 }
@@ -449,12 +536,24 @@ function keyPressed() {
   }
 }
 
+// move landsacpe line as plane moves forward
+function moveMouseX() {
+  mouseX = mouseX - 3;
+  mouseY = mouseY + 0.5;
+  if (mouseX < 0 + width / 13) {
+    mouseX = width - width / 6;
+  }
+  if (mouseY > 600) {
+    mouseX = width;
+    mouseY = 0;
+  }
+}
+
 function handleInput() {
   if (keyIsDown(LEFT_ARROW)) {
     // Turn LEFT if the LEFT arrow is pressed
     airplane.angle -= 0.05;
-  }
-  else if (keyIsDown(RIGHT_ARROW)) {
+  } else if (keyIsDown(RIGHT_ARROW)) {
     // Turn RIGHT if the RIGHT arrow is pressed
     airplane.angle += 0.05;
   }
@@ -463,13 +562,18 @@ function handleInput() {
     // Accelerate forward if the UP ARROW is pressed
     airplane.speed += airplane.acceleration;
     airplane.speed = constrain(airplane.speed, 0, airplane.maxSpeed);
+    if (state === `rightWorld`) {
+    moveMouseX();
+    }
+    if (state === `topWorld`) {
+
+    }
   }
   // Brake if the DOWN ARROW is pressed
   else if (keyIsDown(DOWN_ARROW)) {
     airplane.speed += airplane.braking;
     airplane.speed = constrain(airplane.speed, 0, airplane.maxSpeed);
-  }
-  else {
+  } else {
     // Apply drag if neither are pressed
     airplane.speed += airplane.drag;
     airplane.speed = constrain(airplane.speed, 0, airplane.maxSpeed);
@@ -490,8 +594,7 @@ function wrap() {
   if (airplane.x > width) {
     airplane.x -= width;
     state = `rightWorld`;
-  }
-  else if (airplane.x < 0) {
+  } else if (airplane.x < 0) {
     airplane.x += width;
     state = `leftWorld`;
   }
@@ -499,8 +602,7 @@ function wrap() {
   if (airplane.y > height) {
     airplane.y -= height;
     state = `bottomWorld`;
-  }
-  else if (airplane.y < 0) {
+  } else if (airplane.y < 0) {
     airplane.y += height;
     state = `topWorld`;
   }

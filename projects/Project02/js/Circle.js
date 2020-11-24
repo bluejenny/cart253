@@ -38,7 +38,7 @@ class Circle {
   }
 
   playNote() {
-    this.synth.play(this.note, 0.05, 0, 0.1);
+    this.synth.play(this.note, 0.1, 0, 0.1);
   }
 
   display() {

@@ -149,6 +149,10 @@ function parkAirplane() {
   airplane.angle = 0;
 }
 
+function drawController(x, y) {
+  
+}
+
 function room() {
   drawRoom();
 }

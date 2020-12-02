@@ -27,8 +27,20 @@ let bgDark = {
   b: 79,
 };
 
+//for the ice crystals
+let hex = {
+  x: 0,
+  y: 0,
+  fill: 255,
+  size: 10,
+  speed: .01
+}
+
 // the animated circles
 let circles = [];
+
+// snow falling animation
+let snowflakes = [];
 
 let airplane = {
   x: 0,
@@ -39,7 +51,13 @@ let airplane = {
   maxSpeed: 10, // Moving at 5 pixels per frame
   acceleration: 0.1, // How much velocity is gained when accelerating
   braking: -0.5, // How much velocity is lost when breaking
-  drag: -0.05, // How much velocity is lost when neither accelerating nor braking
+  drag: -0.05 // How much velocity is lost when neither accelerating nor braking
+};
+
+let leftWorldBckgrnd = {
+  r: 0,
+  g: 0,
+  b: 0
 };
 
 let landscapeY = 0;
@@ -58,6 +76,11 @@ let windSFX;
 let sighASFX;
 let sighBSFX;
 let sighCSFX;
+let sighDSFX;
+let sighESFX;
+let sighFSFX;
+let sighGSFX;
+let sighHSFX;
 let snowSFX;
 let walkinparkSFX;
 let melodicloopSFX;
@@ -80,6 +103,11 @@ function preload() {
   sighASFX = loadSound(`assets/sounds/A-sigh.mp3`);
   sighBSFX = loadSound(`assets/sounds/B-sigh.mp3`);
   sighCSFX = loadSound(`assets/sounds/C-sigh.wav`);
+  sighDSFX = loadSound(`assets/sounds/D-sigh.wav`);
+  sighESFX = loadSound(`assets/sounds/E-sigh.wav`);
+  sighFSFX = loadSound(`assets/sounds/F-sigh.wav`);
+  sighGSFX = loadSound(`assets/sounds/G-sigh.wav`);
+  sighHSFX = loadSound(`assets/sounds/H-sigh.wav`);
   snowSFX = loadSound(`assets/sounds/snow.mp3`);
   walkinparkSFX = loadSound(`assets/sounds/walk-in-the-park.wav`);
   melodicloopSFX = loadSound(`assets/sounds/melodic-drum-loop.wav`);
@@ -102,6 +130,9 @@ function setup() {
   //set landscapeY to height for moving landscape down or up screen
   landscapeY = height;
 
+  //set random colors for leftWorld background
+  setleftWorldBckgrnd();
+
   randomWidth = random(0, width);
   randomHeight = random(0, height);
 
@@ -122,6 +153,12 @@ function centerAirplane() {
   airplane.angle = 0; // Facing right to start
 }
 
+function setleftWorldBckgrnd() {
+  leftWorldBckgrnd.r = random(0, 256);
+  leftWorldBckgrnd.g = random(0, 256);
+  leftWorldBckgrnd.b = random(0, 256);
+}
+
 function draw() {
   background(bgDark.r, bgDark.g, bgDark.b);
 
@@ -131,6 +168,8 @@ function draw() {
   } else if (state === `leftWorld`) {
     leftWorld();
   } else if (state === `rightWorld`) {
+    // fallingSnow();
+    // iceCrystals();
     rightWorld();
   } else if (state === `topWorld`) {
     topWorld();
@@ -204,7 +243,8 @@ function room() {
 }
 
 function leftWorld() {
-  backgroundFade(255, 200, 255);
+  // backgroundFade(255, 200, 255);
+  backgroundFade(leftWorldBckgrnd.r, leftWorldBckgrnd.g, leftWorldBckgrnd.b);
   drawSun();
   displayLandscapeLeft();
   // drawController((width / 6) * 5, height / 2 + 200);
@@ -454,8 +494,130 @@ function onSoundLoop(timeFromNow) {
   synth.play(note, 0.025, timeFromNow);
 }
 
+// playRandomNote() plays a random note
+function playRandomNote() {
+  // Chose a random note
+  let note = random(notesF);
+  // Play it
+  synth.play(note, 1, 0, 1);
+}
+
+function createCircle(x, y) {
+  let note = random(notesD);
+  let circle = new Circle(x, y, note);
+  circles.push(circle);
+}
+
+// function createSnowflake(x, y) {
+//   let snowflake = new Snowflake(x, y);
+//   snowflake.push(snowflake);
+// }
+
+function fallingSnow() {
+  push();
+  noStroke();
+  fill(240, 100);
+  // draw falling snow
+
+   let t = frameCount / 60; // update time
+
+   //create a random number of snowflakes each frame
+   for (let i = 0; i < random(1); i++) {
+     snowflakes.push(new snowflake()); // append snowflake object
+   }
+
+   //loop through snowflakes with a for..of loop
+    for (let flake of snowflakes) {
+      flake.update(t); // update snowflake position
+      flake.display(); // draw snowflake
+    }
+    pop();
+}
+
+function snowflake() {
+  // initialize coordinates
+  this.posX = 0;
+  this.posY = random(-50, 0);
+  this.initialangle = random(0, 2 * PI);
+  this.size = random(2, 5);
+
+  // radius of snowflake spiral
+  // chosen so the snowflakes are uniformly spread out in area
+  this.radius = sqrt(random(pow(width / 2, 2)));
+
+  this.update = function(time) {
+    // x position follows a circle
+    let w = 0.6; // angular speed
+    let angle = w * time + this.initialangle;
+    this.posX = width / 2 + this.radius * sin(angle);
+
+    // different size snowflakes fall at slightly different y speeds
+    this.posY += pow(this.size, 0.5);
+
+    // delete snowflake if past end of screen
+    if (this.posY > height) {
+      let index = snowflakes.indexOf(this);
+      snowflakes.splice(index, 1);
+    }
+  };
+
+  this.display = function() {
+    ellipse(this.posX, this.posY, this.size);
+  };
+}
+
+//draws a hexagon
+function hexagon (x, y, r) {
+
+	push();
+  translate(x, y);
+  beginShape();
+	for (var i = 0; i < 7; i++) {
+
+		let x = r * cos(TWO_PI/6 * i + TWO_PI/12);
+		let y = r * sin(TWO_PI/6 * i + TWO_PI/12);
+		vertex(x, y);
+
+	}
+	endShape();
+  pop();
+
+}
+
+function iceCrystals() {
+  for (let i = 0; i < 1; i++) {
+
+    hex.fill = random(200, 255);
+    hex.x = hex.x + hex.speed;
+    fill(hex.fill);
+
+    //circle top right
+    hex.size = random(0, 40);
+    hex.x = random(mouseX, width);
+    hex.y = random(0, mouseY);
+    hexagon(hex.x, hex.y, hex.size);
+
+    //circle bottom left
+    hex.size = random(0, 30);
+    hex.x = random(0, mouseX);
+    hex.y = random(height, mouseY);
+    hexagon(hex.x, hex.y, hex.size);
+
+    //circle top left
+    hex.x = random(0, mouseX);
+    hex.y = random(0, mouseY);
+    hexagon(hex.x, hex.y, hex.size);
+
+    //circle bottom right
+    hex.x = random(mouseX, width);
+    hex.y = random(height, mouseY);
+    hexagon(hex.x, hex.y, hex.size);
+  }
+}
+
 function mousePressed() {
   createCircle(mouseX, mouseY);
+
 
   //first row
 
@@ -496,7 +658,9 @@ function mousePressed() {
     mouseY > height / 2 - 205 &&
     mouseY < height / 2 - 195
   ) {
-    sighASFX.play();
+    // sighASFX.play();
+    fallingSnow();
+    iceCrystals();
   }
 
   if (
@@ -587,25 +751,6 @@ function mousePressed() {
   }
 }
 
-// playRandomNote() plays a random note
-function playRandomNote() {
-  // Chose a random note
-  let note = random(notesF);
-  // Play it
-  synth.play(note, 1, 0, 1);
-}
-
-function createCircle(x, y) {
-  let note = random(notesD);
-  let circle = new Circle(x, y, note);
-  circles.push(circle);
-}
-
-function createSnowflake(x, y) {
-  let snowflake = new Snowflake(x, y);
-  snowflake.push(snowflake);
-}
-
 // example of a key pressed sound
 function keyPressed() {
   if (key === "a") {
@@ -616,6 +761,21 @@ function keyPressed() {
   }
   if (key === "c") {
     sighCSFX.play();
+  }
+  if (key === "d") {
+    sighDSFX.play();
+  }
+  if (key === "e") {
+    sighESFX.play();
+  }
+  if (key === "f") {
+    sighFSFX.play();
+  }
+  if (key === "g") {
+    sighGSFX.play();
+  }
+  if (key === "h") {
+    sighHSFX.play();
   }
   if (keyCode === RETURN) {
     state = `room`;

@@ -28,7 +28,7 @@ class Circle {
       this.stroke.b += this.colorChange;
     }
 
-    if (this.y - this.size / 2 < 0 || this.y + this.size / 2 > height) {
+    if (this.size < -500 || this.size > height+500) {
       stop();
       this.strokeWeight = 0;
       this.growing = false;

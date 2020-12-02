@@ -18,7 +18,7 @@
 // untill such time you are called
 // back to reality
 
-let state = `room`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
+let state = `rightWorld`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
 
 //dark bckgrnd behind simulation
 let bgDark = {
@@ -55,10 +55,14 @@ let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
 let notesD = [`D4`, `E4`, `F4`, `G4`, `A4`, `Bb5`, `C4`, `D4`];
 
 let windSFX;
-let sighSFX;
-let sigh2SFX;
+let sighASFX;
+let sighBSFX;
+let sighCSFX;
 let snowSFX;
 let walkinparkSFX;
+let melodicloopSFX;
+let mysteriousSFX;
+let acidloopSFX;
 
 let synth;
 let soundLoop;
@@ -73,10 +77,14 @@ let loopIsPlaying = false;
 
 function preload() {
   windSFX = loadSound(`assets/sounds/wind-1.mp3`);
-  sighSFX = loadSound(`assets/sounds/A-sigh.mp3`);
-  sigh2SFX = loadSound(`assets/sounds/sigh.wav`);
+  sighASFX = loadSound(`assets/sounds/A-sigh.mp3`);
+  sighBSFX = loadSound(`assets/sounds/B-sigh.mp3`);
+  sighCSFX = loadSound(`assets/sounds/C-sigh.wav`);
   snowSFX = loadSound(`assets/sounds/snow.mp3`);
   walkinparkSFX = loadSound(`assets/sounds/walk-in-the-park.wav`);
+  melodicloopSFX = loadSound(`assets/sounds/melodic-drum-loop.wav`);
+  mysteriousSFX = loadSound(`assets/sounds/mysterious.wav`);
+  acidloopSFX = loadSound(`assets/sounds/acid-loop.wav`);
 }
 
 function setup() {
@@ -119,7 +127,7 @@ function draw() {
 
   if (state === `room`) {
     room();
-    drawCursor();
+    // drawCursor();
   } else if (state === `leftWorld`) {
     leftWorld();
   } else if (state === `rightWorld`) {
@@ -131,8 +139,10 @@ function draw() {
   }
 
   // check to see if someone is clicking on a marker
+  if (state !== 'room') {
   checkMarkers();
   displayMarkers();
+  }
 
   // airplane
   handleInput();
@@ -147,19 +157,19 @@ function draw() {
   }
 }
 
-function drawCursor() {
-  // cursor
-
-
-  push();
-  // fill(random(230, 235), 150);
-  stroke(random(200, 235), 200);
-  line(mouseX - 5, mouseY, mouseX + 5, mouseY);
-  line(mouseX, mouseY - 5, mouseX, mouseY + 5);
-  noStroke();
-  // ellipse(mouseX, mouseY, 10);
-  pop();
-}
+// function drawCursor() {
+//   // cursor
+//
+//
+//   push();
+//   // fill(random(230, 235), 150);
+//   stroke(random(200, 235), 200);
+//   line(mouseX - 5, mouseY, mouseX + 5, mouseY);
+//   line(mouseX, mouseY - 5, mouseX, mouseY + 5);
+//   noStroke();
+//   // ellipse(mouseX, mouseY, 10);
+//   pop();
+// }
 
 function resetMouse() {
   mouseX = width / 2;
@@ -208,7 +218,7 @@ function rightWorld() {
 }
 
 function topWorld() {
-  drawCursor();
+  // drawCursor();
   backgroundFade(48, 65, 79);
   drawSun();
   displayLandscape();
@@ -216,7 +226,7 @@ function topWorld() {
 }
 
 function bottomWorld() {
-  drawCursor();
+  // drawCursor();
   backgroundFade(202, 225, 245);
   drawSun();
   displayLandscape();
@@ -300,7 +310,7 @@ function drawSun() {
 
   let points = 16; //number of points
   let pointAngle = 360 / points; //angle between points
-  let radius = width / 2; //length of each line from centre to edge of circle
+  let radius = width; //length of each line from centre to edge of circle
 
   //check to see if on mobile screen (vertical)
   if (width / 2 < height / 2) {
@@ -382,6 +392,9 @@ function displayMarkers() {
   //top
 
   //top-left
+  let markerColor = color(77, 87, 99);
+  markerColor.setAlpha(128 + 128 * sin(millis() / 1000));
+  stroke(markerColor);
   line(width / 2 - 5, height / 2 - 200, width / 2 + 5, height / 2 - 200);
   line(width / 2, height / 2 - 205, width / 2, height / 2 - 195);
 
@@ -456,10 +469,23 @@ function mousePressed() {
   ) {
     if (loopIsPlaying) {
       walkinparkSFX.stop();
+      melodicloopSFX.stop();
+      mysteriousSFX.stop();
+      acidloopSFX.stop();
       loopIsPlaying = false;
     } else {
+      if (state === `rightWorld`) {
       walkinparkSFX.loop();
-      // walkinparkSFX.volume(0);
+    }
+      else if (state === `leftWorld`) {
+        melodicloopSFX.loop();
+      }
+      else if (state === `topWorld`) {
+        mysteriousSFX.loop();
+      }
+      else if (state === `bottomWorld`) {
+        acidloopSFX.loop();
+      }
       loopIsPlaying = true;
     }
   }
@@ -470,7 +496,7 @@ function mousePressed() {
     mouseY > height / 2 - 205 &&
     mouseY < height / 2 - 195
   ) {
-    sighSFX.play();
+    sighASFX.play();
   }
 
   if (
@@ -537,7 +563,7 @@ function mousePressed() {
     // check to see if playing
     if (interval === undefined) {
       // Start interval, calling playRandomNote every 100 milliseconds
-      interval = setInterval(playRandomNote, 100);
+      interval = setInterval(playRandomNote, 200);
     } else {
       // stop play
       clearInterval(interval);
@@ -583,7 +609,13 @@ function createSnowflake(x, y) {
 // example of a key pressed sound
 function keyPressed() {
   if (key === "a") {
-    sigh2SFX.play();
+    sighASFX.play();
+  }
+  if (key === "b") {
+    sighBSFX.play();
+  }
+  if (key === "c") {
+    sighCSFX.play();
   }
   if (keyCode === RETURN) {
     state = `room`;

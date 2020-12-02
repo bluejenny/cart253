@@ -27,13 +27,6 @@ let bgDark = {
   b: 79,
 };
 
-//sky bacground, opacity fades as mouseY moves down
-// let bgLight = {
-//   r: 202,
-//   g: 225,
-//   b: 244
-// }
-
 // the animated circles
 let circles = [];
 
@@ -49,7 +42,11 @@ let airplane = {
   drag: -0.05, // How much velocity is lost when neither accelerating nor braking
 };
 
-let bottomrightMarker = false;
+let landscapeY = 0;
+let landsacpeVY = 1;
+
+let randomWidth;
+let randomHeight;
 
 // F-minor
 let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
@@ -94,6 +91,12 @@ function setup() {
   noFill();
   noCursor();
 
+  //set landscapeY to height for moving landscape down or up screen
+  landscapeY = height;
+
+  randomWidth = random(0, width);
+  randomHeight = random(0, height);
+
   // userStartAudio();
   let intervalInSeconds = 0.05;
   soundLoop = new p5.SoundLoop(onSoundLoop, intervalInSeconds);
@@ -127,17 +130,15 @@ function draw() {
     bottomWorld();
   }
 
-
+  // check to see if someone is clicking on a marker
+  checkMarkers();
+  displayMarkers();
 
   // airplane
   handleInput();
   move();
   wrap();
   displayAirplane();
-
-  // show + where user can click
-  checkMarkers();
-  displayMarkers();
 
   for (let i = 0; i < circles.length; i++) {
     let circle = circles[i];
@@ -148,8 +149,16 @@ function draw() {
 
 function drawCursor() {
   // cursor
+
+
+  push();
+  // fill(random(230, 235), 150);
+  stroke(random(200, 235), 200);
   line(mouseX - 5, mouseY, mouseX + 5, mouseY);
   line(mouseX, mouseY - 5, mouseX, mouseY + 5);
+  noStroke();
+  // ellipse(mouseX, mouseY, 10);
+  pop();
 }
 
 function resetMouse() {
@@ -181,35 +190,37 @@ function drawController(x, y) {
 function room() {
   // drawCursor();
   drawRoom();
-  drawController(width / 2, height / 2);
+  // drawController(width / 2, height / 2);
 }
 
 function leftWorld() {
   backgroundFade(255, 200, 255);
   drawSun();
-  displayLandscape();
-  drawController((width / 6) * 5, height / 2 + 200);
+  displayLandscapeLeft();
+  // drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function rightWorld() {
-  backgroundFade(202, 225, 245);
+  backgroundFade(245, 225, 244);
   drawSun();
   displayLandscape();
-  drawController((width / 6) * 5, height / 2 + 200);
+  // drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function topWorld() {
   drawCursor();
-  backgroundFade(245, 225, 244);
-  // displayLandscape();
-  drawController((width / 6) * 5, height / 2 + 200);
+  backgroundFade(48, 65, 79);
+  drawSun();
+  displayLandscape();
+  // drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function bottomWorld() {
   drawCursor();
-  backgroundFade(48, 65, 79);
-  // displayLandscape();
-  drawController((width / 6) * 5, height / 2 + 200);
+  backgroundFade(202, 225, 245);
+  drawSun();
+  displayLandscape();
+  // drawController((width / 6) * 5, height / 2 + 200);
 }
 
 // creates effect of canvas getting lighter or darker
@@ -238,26 +249,53 @@ function drawRoom() {
 
   // top and bottom horizonatal line
   line(width / 2 - width / 3, 100, width / 2 + width / 3, 100);
-  line(
-    width / 2 - width / 3,
-    height - 150,
-    width / 2 + width / 3,
-    height - 150
-  );
+  line(width / 2 - width / 3, height - 150, width / 2 + width / 3, height - 150);
 
   // left and right vertical line
   line(width / 2 - width / 3, 100, width / 2 - width / 3, height - 150);
   line(width / 2 + width / 3, 100, width / 2 + width / 3, height - 150);
 
-  // screen
-  // fill(225, o);
-  // rect(width/2-width/10, height/2-75, width/10*2, height/5);
+
+  fill(225, o);
+  // door window
+  rect(width/2-width/18, height/2-height/5, width/18*2, height-450);
+  // window left glass
+  rect(width/3-10, height / 2 - 175, 33, 65);
+  rect(width/3 +27, height / 2 - 175, 33, 65);
+
+  rect(width/3-10, height / 2 - 105, 33, 65);
+  rect(width/3 +27, height / 2 - 105, 33, 65);
+
+  rect(width/3-10, height / 2 - 30, 70, height / 2 - 240);
+  // rect(width/3 -60, height / 2 - 175, width/22, height / 2 - 290);
+
+  push();
+  translate(width/3-50, 0);
+  rect(width/3-10, height / 2 - 175, 33, 65);
+  rect(width/3 +27, height / 2 - 175, 33, 65);
+
+  rect(width/3-10, height / 2 - 105, 33, 65);
+  rect(width/3 +27, height / 2 - 105, 33, 65);
+
+  rect(width/3-10, height / 2 - 30, 70, height / 2 - 240);
   pop();
+
+
+
+  noFill();
+  // door
+  rect(width/2-width/12, height / 2 - 200, width/12*2, height / 2 + 50);
+
+
+
+  pop();
+
+
 }
 
 function drawSun() {
   push();
-  stroke(random(175, 245));
+  stroke(random(200, 235));
   ellipseMode(CENTER);
 
   let points = 16; //number of points
@@ -277,7 +315,7 @@ function drawSun() {
   pop();
 }
 
-function displayLandscape() {
+function displayLandscapeLeft() {
   push();
 
   //bckgrnd mts
@@ -286,35 +324,52 @@ function displayLandscape() {
   stroke(255, opacity);
 
   // mtns back
-  triangle(mouseX - width / 8, (2 * height) / 3 + 20, 0, height / 3 - 100, 0, height);
-  triangle(mouseX + width / 8, (2 * height) / 3 + 20, width, height / 3 - 100, width, height);
+  triangle(mouseX - width / 8, (landscapeY) / 3, 0, landscapeY / 3 - 200, 0, landscapeY);
+  triangle(mouseX + width / 8, (landscapeY) / 3, width, landscapeY / 3 - 200, width, landscapeY);
 
   // mtns front
   fill(87, 97, 109);
-  triangle(mouseX + 30, (2 * height) / 3, 0, height / 2 - 30, 0, height - 100);
-  triangle(
-    mouseX - 30,
-    (2 * height) / 3,
-    width,
-    height / 2 - 50,
-    width,
-    height - 100
-  );
+  triangle(mouseX + 30, (landscapeY) / 3, 0, landscapeY / 3 - 30, 0, landscapeY - 200);
+  triangle(mouseX - 30, (landscapeY) / 3, width, landscapeY / 3 - 50, width, landscapeY - 200);
 
   fill(77, 87, 99);
-  triangle(mouseX - 10, (2 * height) / 3, 0, height / 2 + 55, 0, height);
-  triangle(
-    mouseX + 10,
-    (2 * height) / 3,
-    width,
-    height / 2 + 55,
-    width,
-    height
-  );
+  triangle(mouseX - 10, (landscapeY) / 3, 0, landscapeY / 3, 0, landscapeY-300);
+  triangle(mouseX + 10, (landscapeY) / 3, width, landscapeY / 3, width, landscapeY-300);
 
   //land
   fill(142, 163, 180, 220);
-  rect(0, (2 * height) / 3, width, height / 2);
+  rect(0, 0, width, (landscapeY) / 3);
+  pop();
+}
+
+function displayLandscape() {
+  push();
+
+  //land
+  fill(142, 163, 180, 200);
+  rect(0, (2 * landscapeY) / 3, width, height);
+
+  //bckgrnd mts
+  let opacity = map(mouseY, 0, height, 200, 50);
+  fill(87, 97, 109, opacity);
+  stroke(255, opacity);
+
+  // mtns back
+  triangle(mouseX - width / 8, (2 * landscapeY) / 3 + 20, 0, landscapeY / 3 - 100, 0, landscapeY);
+  triangle(mouseX + width / 8, (2 * landscapeY) / 3 + 20, width, landscapeY / 3 - 100, width, landscapeY);
+
+  // mtns front
+  fill(87, 97, 109);
+  triangle(mouseX + 30, (2 * landscapeY) / 3, 0, landscapeY / 2 - 30, 0, landscapeY - 100);
+  triangle(mouseX - 30, (2 * landscapeY) / 3, width, landscapeY / 2 - 50, width, landscapeY - 100);
+
+  fill(77, 87, 99);
+  triangle(mouseX - 10, (2 * landscapeY) / 3, 0, landscapeY / 2 + 55, 0, landscapeY);
+  triangle(mouseX + 10, (2 * landscapeY) / 3, width, landscapeY / 2 + 55, width, landscapeY);
+
+  //land
+  fill(142, 163, 180, 220);
+  rect(0, (2 * landscapeY) / 3, width, height);
   pop();
 }
 
@@ -371,21 +426,13 @@ function displayMarkers() {
   // noFill();
   // noStroke();
   // ellipse(width / 6 * 5, height / 2 + 200, 80);
-  // line((width / 6) * 5 - 5, height / 2 + 200, (width / 6) * 5 + 5, height / 2 + 200);
-  // line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
+  line((width / 6) * 5 - 5, height / 2 + 200, (width / 6) * 5 + 5, height / 2 + 200);
+  line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
   pop();
 }
 
 function checkMarkers() {
-  // bottom right
-  if (
-    mouseX >= (width / 6) * 5 - 5 &&
-    mouseX <= (width / 6) * 5 + 5 &&
-    mouseY > height / 2 + 195 &&
-    mouseY < height / 2 + 205
-  ) {
-    bottomrightMarker = true;
-  }
+
 }
 
 function onSoundLoop(timeFromNow) {
@@ -395,6 +442,8 @@ function onSoundLoop(timeFromNow) {
 }
 
 function mousePressed() {
+  createCircle(mouseX, mouseY);
+
   //first row
 
   userStartAudio();
@@ -410,6 +459,7 @@ function mousePressed() {
       loopIsPlaying = false;
     } else {
       walkinparkSFX.loop();
+      // walkinparkSFX.volume(0);
       loopIsPlaying = true;
     }
   }
@@ -495,7 +545,12 @@ function mousePressed() {
     }
   }
 
-  if (bottomrightMarker) {
+  if (
+    mouseX >= (width / 6) * 5 - 5 &&
+    mouseX <= (width / 6) * 5 + 5 &&
+    mouseY > height / 2 + 195 &&
+    mouseY < height / 2 + 205
+  ) {
     if (soundLoop.isPlaying) {
       soundLoop.stop();
     } else {
@@ -538,7 +593,7 @@ function keyPressed() {
 
 // move landsacpe line as plane moves forward
 function moveMouseX() {
-  mouseX = mouseX - 3;
+  mouseX = mouseX - 1;
   mouseY = mouseY + 0.5;
   if (mouseX < 0 + width / 13) {
     mouseX = width - width / 6;
@@ -566,7 +621,12 @@ function handleInput() {
     moveMouseX();
     }
     if (state === `topWorld`) {
-
+    landscapeY += landsacpeVY;
+    mouseY += landsacpeVY;
+    }
+    if (state === `bottomWorld`) {
+    landscapeY += -landsacpeVY;
+    mouseY += -landsacpeVY;
     }
   }
   // Brake if the DOWN ARROW is pressed

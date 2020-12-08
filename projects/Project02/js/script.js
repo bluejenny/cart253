@@ -1,7 +1,6 @@
 "use strict";
 
 // Project 2
-// Daydreamer to the nth Degree
 // Jen Poohachoff
 
 // **********************************************
@@ -18,7 +17,7 @@
 // untill such time you are called
 // back to reality
 
-let state = `rightWorld`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
+let state = `topWorld`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
 
 //dark bckgrnd behind simulation
 let bgDark = {
@@ -41,6 +40,7 @@ let circles = [];
 
 // snow falling animation
 let snowflakes = [];
+let snowFalling = false;
 
 let airplane = {
   x: 0,
@@ -51,7 +51,10 @@ let airplane = {
   maxSpeed: 10, // Moving at 5 pixels per frame
   acceleration: 0.1, // How much velocity is gained when accelerating
   braking: -0.5, // How much velocity is lost when breaking
-  drag: -0.05 // How much velocity is lost when neither accelerating nor braking
+  drag: -0.05, // How much velocity is lost when neither accelerating nor braking
+  vx: 0,
+  vy: 0,
+  movementSpeed: 2
 };
 
 let leftWorldBckgrnd = {
@@ -60,11 +63,9 @@ let leftWorldBckgrnd = {
   b: 0
 };
 
+// set to move landscape
 let landscapeY = 0;
 let landsacpeVY = 1;
-
-let randomWidth;
-let randomHeight;
 
 // F-minor
 let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
@@ -72,6 +73,7 @@ let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
 // random
 let notesD = [`D4`, `E4`, `F4`, `G4`, `A4`, `Bb5`, `C4`, `D4`];
 
+// sound effects
 let windSFX;
 let sighASFX;
 let sighBSFX;
@@ -82,15 +84,17 @@ let sighFSFX;
 let sighGSFX;
 let sighHSFX;
 let snowSFX;
+let subDrop;  // center airplane sound
 let walkinparkSFX;
 let melodicloopSFX;
 let mysteriousSFX;
 let acidloopSFX;
 
+// computer sound
 let synth;
 let soundLoop;
-// let notePattern = [80, 82, 84, 87, 89, 92];
 let notePattern = [60, 72, 67, 64, 72, 80];
+let notePattern2 = [80, 82, 84, 87, 89, 92];
 
 let synthPoly;
 let interval;
@@ -109,6 +113,7 @@ function preload() {
   sighGSFX = loadSound(`assets/sounds/G-sigh.wav`);
   sighHSFX = loadSound(`assets/sounds/H-sigh.wav`);
   snowSFX = loadSound(`assets/sounds/snow.mp3`);
+  subDrop = loadSound(`assets/sounds/sub-drop_D_major.wav`);
   walkinparkSFX = loadSound(`assets/sounds/walk-in-the-park.wav`);
   melodicloopSFX = loadSound(`assets/sounds/melodic-drum-loop.wav`);
   mysteriousSFX = loadSound(`assets/sounds/mysterious.wav`);
@@ -124,7 +129,6 @@ function setup() {
   // standard colors
   stroke(77, 87, 99);
   strokeWeight(1);
-  noFill();
   noCursor();
 
   //set landscapeY to height for moving landscape down or up screen
@@ -132,9 +136,6 @@ function setup() {
 
   //set random colors for leftWorld background
   setleftWorldBckgrnd();
-
-  randomWidth = random(0, width);
-  randomHeight = random(0, height);
 
   // userStartAudio();
   let intervalInSeconds = 0.05;
@@ -145,12 +146,6 @@ function setup() {
 
   //set mouse to center of screen
   resetMouse();
-}
-
-function centerAirplane() {
-  airplane.x = width / 2 - 30;
-  airplane.y = height / 2;
-  airplane.angle = 0; // Facing right to start
 }
 
 function setleftWorldBckgrnd() {
@@ -168,8 +163,6 @@ function draw() {
   } else if (state === `leftWorld`) {
     leftWorld();
   } else if (state === `rightWorld`) {
-    // fallingSnow();
-    // iceCrystals();
     rightWorld();
   } else if (state === `topWorld`) {
     topWorld();
@@ -181,6 +174,10 @@ function draw() {
   if (state !== 'room') {
   checkMarkers();
   displayMarkers();
+  }
+
+  if (mouseIsPressed && state !== `room`) {
+  iceCrystals();
   }
 
   // airplane
@@ -196,50 +193,46 @@ function draw() {
   }
 }
 
-// function drawCursor() {
-//   // cursor
-//
-//
-//   push();
-//   // fill(random(230, 235), 150);
-//   stroke(random(200, 235), 200);
-//   line(mouseX - 5, mouseY, mouseX + 5, mouseY);
-//   line(mouseX, mouseY - 5, mouseX, mouseY + 5);
-//   noStroke();
-//   // ellipse(mouseX, mouseY, 10);
-//   pop();
-// }
-
 function resetMouse() {
   mouseX = width / 2;
   mouseY = height / 2;
 }
 
-function parkAirplane() {
-  airplane.x = (width / 6) * 5 - 30;
-  airplane.y = height / 2 + 200;
-  airplane.angle = 0;
+function centerAirplane() {
+  push();
+  airplane.x = width / 2 - 30;
+  airplane.y = height / 2;
+  airplane.angle = 0; // Facing right to start
+  pop();
 }
+
+// function parkAirplane() {
+//   airplane.x = (width / 6) * 5 - 30;
+//   airplane.y = height / 2 + 200;
+//   airplane.angle = 0;
+// }
 
 function drawController(x, y) {
   push();
   noStroke();
-  fill(50, 100);
+  let controlColor = color(50, 50, 50);
+  controlColor.setAlpha(50 + 50 * sin(millis() / 1000));
+  fill(controlColor);
   //bottom
-  triangle(x - 8, y + 45, x + 8, y + 45, x, y + 55);
+  triangle(x - 8, y + 40, x + 8, y + 40, x, y + 50);
   //top
-  triangle(x - 8, y - 45, x + 8, y - 45, x, y - 55);
+  triangle(x - 8, y - 40, x + 8, y - 40, x, y - 50);
   //left
-  triangle(x - 55, y - 8, x - 55, y + 8, x - 65, y);
+  triangle(x - 45, y - 8, x - 45, y + 8, x - 55, y);
   //right
-  triangle(x + 55, y - 8, x + 55, y + 8, x + 65, y);
+  triangle(x + 45, y - 8, x + 45, y + 8, x + 55, y);
   pop();
 }
 
 function room() {
   // drawCursor();
   drawRoom();
-  // drawController(width / 2, height / 2);
+  drawController(width / 2, height / 2);
 }
 
 function leftWorld() {
@@ -258,16 +251,16 @@ function rightWorld() {
 }
 
 function topWorld() {
-  // drawCursor();
-  backgroundFade(48, 65, 79);
+  // backgroundFade(48, 65, 79);
+  backgroundFade(245, 225, 244);
   drawSun();
   displayLandscape();
   // drawController((width / 6) * 5, height / 2 + 200);
 }
 
 function bottomWorld() {
-  // drawCursor();
-  backgroundFade(202, 225, 245);
+  // backgroundFade(202, 225, 245);
+  backgroundFade(245, 225, 244);
   drawSun();
   displayLandscape();
   // drawController((width / 6) * 5, height / 2 + 200);
@@ -284,6 +277,7 @@ function backgroundFade(r, g, b) {
 
 function drawRoom() {
   push();
+
   //adjust opacity of fill by mouseY position
   let o = map(mouseY, 0, height, 255, 150);
   fill(235, o);
@@ -305,10 +299,11 @@ function drawRoom() {
   line(width / 2 - width / 3, 100, width / 2 - width / 3, height - 150);
   line(width / 2 + width / 3, 100, width / 2 + width / 3, height - 150);
 
-
-  fill(225, o);
-  // door window
+  fill(205, o);
+  // door
+  rect(width/2-width/12, height / 2 - 200, width/12*2, height / 2 + 50);
   rect(width/2-width/18, height/2-height/5, width/18*2, height-450);
+
   // window left glass
   rect(width/3-10, height / 2 - 175, 33, 65);
   rect(width/3 +27, height / 2 - 175, 33, 65);
@@ -316,10 +311,8 @@ function drawRoom() {
   rect(width/3-10, height / 2 - 105, 33, 65);
   rect(width/3 +27, height / 2 - 105, 33, 65);
 
-  rect(width/3-10, height / 2 - 30, 70, height / 2 - 240);
-  // rect(width/3 -60, height / 2 - 175, width/22, height / 2 - 290);
+  rect(width/3-10, height / 2 - 30, 70, 115);
 
-  push();
   translate(width/3-50, 0);
   rect(width/3-10, height / 2 - 175, 33, 65);
   rect(width/3 +27, height / 2 - 175, 33, 65);
@@ -327,20 +320,9 @@ function drawRoom() {
   rect(width/3-10, height / 2 - 105, 33, 65);
   rect(width/3 +27, height / 2 - 105, 33, 65);
 
-  rect(width/3-10, height / 2 - 30, 70, height / 2 - 240);
-  pop();
-
-
-
-  noFill();
-  // door
-  rect(width/2-width/12, height / 2 - 200, width/12*2, height / 2 + 50);
-
-
+  rect(width/3-10, height / 2 - 30, 70, 115);
 
   pop();
-
-
 }
 
 function drawSun() {
@@ -365,8 +347,17 @@ function drawSun() {
   pop();
 }
 
+function checkSnowFalling() {
+  if (snowFalling) {
+  fallingSnow();
+  }
+}
+
+// redraws landscape but upside down
 function displayLandscapeLeft() {
   push();
+
+  checkSnowFalling()
 
   //bckgrnd mts
   let opacity = map(mouseY, 0, height, 200, 50);
@@ -378,15 +369,16 @@ function displayLandscapeLeft() {
   triangle(mouseX + width / 8, (landscapeY) / 3, width, landscapeY / 3 - 200, width, landscapeY);
 
   // mtns front
-  fill(87, 97, 109);
+  fill(87, 97, 109, opacity);
   triangle(mouseX + 30, (landscapeY) / 3, 0, landscapeY / 3 - 30, 0, landscapeY - 200);
   triangle(mouseX - 30, (landscapeY) / 3, width, landscapeY / 3 - 50, width, landscapeY - 200);
 
-  fill(77, 87, 99);
+  fill(77, 87, 99, opacity);
   triangle(mouseX - 10, (landscapeY) / 3, 0, landscapeY / 3, 0, landscapeY-300);
   triangle(mouseX + 10, (landscapeY) / 3, width, landscapeY / 3, width, landscapeY-300);
 
   //land
+
   fill(142, 163, 180, 220);
   rect(0, 0, width, (landscapeY) / 3);
   pop();
@@ -394,6 +386,9 @@ function displayLandscapeLeft() {
 
 function displayLandscape() {
   push();
+  noStroke();
+
+  checkSnowFalling();
 
   //land
   fill(142, 163, 180, 200);
@@ -405,6 +400,11 @@ function displayLandscape() {
   stroke(255, opacity);
 
   // mtns back
+  push();
+  fill(77, 87, 99);
+  triangle(mouseX - width / 8, (2 * landscapeY) / 3 + 20, 0, landscapeY / 3 - 100, 0, landscapeY);
+  triangle(mouseX + width / 8, (2 * landscapeY) / 3 + 20, width, landscapeY / 3 - 100, width, landscapeY);
+  pop();
   triangle(mouseX - width / 8, (2 * landscapeY) / 3 + 20, 0, landscapeY / 3 - 100, 0, landscapeY);
   triangle(mouseX + width / 8, (2 * landscapeY) / 3 + 20, width, landscapeY / 3 - 100, width, landscapeY);
 
@@ -413,7 +413,8 @@ function displayLandscape() {
   triangle(mouseX + 30, (2 * landscapeY) / 3, 0, landscapeY / 2 - 30, 0, landscapeY - 100);
   triangle(mouseX - 30, (2 * landscapeY) / 3, width, landscapeY / 2 - 50, width, landscapeY - 100);
 
-  fill(77, 87, 99);
+
+  fill(97, 107, 119);
   triangle(mouseX - 10, (2 * landscapeY) / 3, 0, landscapeY / 2 + 55, 0, landscapeY);
   triangle(mouseX + 10, (2 * landscapeY) / 3, width, landscapeY / 2 + 55, width, landscapeY);
 
@@ -428,8 +429,6 @@ function displayMarkers() {
   push();
 
   // markers
-
-  //top
 
   //top-left
   let markerColor = color(77, 87, 99);
@@ -451,7 +450,6 @@ function displayMarkers() {
   );
   line((width / 6) * 5, height / 2 - 205, (width / 6) * 5, height / 2 - 195);
 
-  // middle line
 
   // middle left
   line(width / 2 - 5, height / 2, width / 2 + 5, height / 2);
@@ -465,7 +463,6 @@ function displayMarkers() {
   line((width / 6) * 5 - 5, height / 2, (width / 6) * 5 + 5, height / 2);
   line((width / 6) * 5, height / 2 - 5, (width / 6) * 5, height / 2 + 5);
 
-  // bottom line
 
   // bottom left
   line(width / 2 - 5, height / 2 + 200, width / 2 + 5, height / 2 + 200);
@@ -476,9 +473,6 @@ function displayMarkers() {
   line(width / 6, height / 2 + 205, width / 6, height / 2 + 195);
 
   // bottom right
-  // noFill();
-  // noStroke();
-  // ellipse(width / 6 * 5, height / 2 + 200, 80);
   line((width / 6) * 5 - 5, height / 2 + 200, (width / 6) * 5 + 5, height / 2 + 200);
   line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
   pop();
@@ -508,17 +502,19 @@ function createCircle(x, y) {
   circles.push(circle);
 }
 
-// function createSnowflake(x, y) {
-//   let snowflake = new Snowflake(x, y);
-//   snowflake.push(snowflake);
-// }
+function createCircle2(x, y) {
+  let note = random(notesF);
+  let circle = new Circle2(x, y, note);
+  circles.push(circle);
+}
 
 function fallingSnow() {
+
   push();
   noStroke();
   fill(240, 100);
-  // draw falling snow
 
+  // draw falling snow
    let t = frameCount / 60; // update time
 
    //create a random number of snowflakes each frame
@@ -531,10 +527,13 @@ function fallingSnow() {
       flake.update(t); // update snowflake position
       flake.display(); // draw snowflake
     }
+
     pop();
 }
 
 function snowflake() {
+  //code from p5.js
+
   // initialize coordinates
   this.posX = 0;
   this.posY = random(-50, 0);
@@ -585,9 +584,10 @@ function hexagon (x, y, r) {
 }
 
 function iceCrystals() {
+  push();
   for (let i = 0; i < 1; i++) {
-
-    hex.fill = random(200, 255);
+    noStroke();
+    hex.fill = random(200, 175);
     hex.x = hex.x + hex.speed;
     fill(hex.fill);
 
@@ -613,13 +613,22 @@ function iceCrystals() {
     hex.y = random(height, mouseY);
     hexagon(hex.x, hex.y, hex.size);
   }
+  pop();
 }
 
 function mousePressed() {
+  if (state !== `room`) {
+    if (state === `rightWorld`) {
   createCircle(mouseX, mouseY);
+} else if (state === `topWorld`) {
+createCircle2(mouseX, mouseY);
+}
 
+
+  }
 
   //first row
+  // top left marker - start and stop soundtrack
 
   userStartAudio();
 
@@ -640,17 +649,19 @@ function mousePressed() {
       walkinparkSFX.loop();
     }
       else if (state === `leftWorld`) {
-        melodicloopSFX.loop();
+      melodicloopSFX.loop();
       }
       else if (state === `topWorld`) {
-        mysteriousSFX.loop();
+      mysteriousSFX.loop();
       }
       else if (state === `bottomWorld`) {
-        acidloopSFX.loop();
+      acidloopSFX.loop();
       }
       loopIsPlaying = true;
     }
   }
+
+  // middle top marker - start and stop snow falling
 
   if (
     mouseX >= width / 2 - 5 &&
@@ -658,21 +669,32 @@ function mousePressed() {
     mouseY > height / 2 - 205 &&
     mouseY < height / 2 - 195
   ) {
-    // sighASFX.play();
-    fallingSnow();
-    iceCrystals();
+    if (!snowFalling) {
+    snowFalling = true;
+  } else {
+    snowFalling = false;
   }
+
+  }
+
+  // right top marker - start wind blowing
 
   if (
     mouseX >= (width / 6) * 5 - 5 &&
     mouseX <= (width / 6) * 5 + 5 &&
     mouseY > height / 2 - 205 &&
     mouseY < height / 2 - 195
-  ) {
-    windSFX.play();
+  )
+  if (loopIsPlaying) {
+    windSFX.stop();
+    loopIsPlaying = false;
+  } else {
+    windSFX.loop();
+    loopIsPlaying = true;
   }
 
   //middle row
+  // left middle row marker -
 
   if (
     mouseX >= width / 6 - 5 &&
@@ -680,18 +702,28 @@ function mousePressed() {
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
   ) {
-    createCircle(mouseX, mouseY);
+    // createCircle(mouseX, mouseY);
   }
+
+  // middle middle row marker - center plane
 
   if (
     mouseX >= width / 2 - 5 &&
     mouseX <= width / 2 + 5 &&
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
-  ) {
-    createCircle(mouseX, mouseY);
-    // centerAirplane();
+  )  {
+    if (soundLoop.isPlaying) {
+      soundLoop.stop();
+    } else {
+      // start the loop
+      soundLoop.start();
+      // subDrop.loop();
+      centerAirplane();
+    }
   }
+
+  // middle right row marker
 
   if (
     mouseX >= (width / 6) * 5 - 5 &&
@@ -699,10 +731,11 @@ function mousePressed() {
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
   ) {
-    createCircle(mouseX, mouseY);
+    // createCircle(mouseX, mouseY);
   }
 
   // bottom row
+  // bottom left marker - start sound of walking in snow
   if (
     mouseX >= width / 6 - 5 &&
     mouseX <= width / 6 + 5 &&
@@ -717,6 +750,8 @@ function mousePressed() {
       loopIsPlaying = true;
     }
   }
+
+  // bottom middle marker - play computer sound and ...
 
   if (
     mouseX >= width / 2 - 5 &&
@@ -735,23 +770,19 @@ function mousePressed() {
     }
   }
 
+  // bottom right marker -
+
   if (
     mouseX >= (width / 6) * 5 - 5 &&
     mouseX <= (width / 6) * 5 + 5 &&
     mouseY > height / 2 + 195 &&
     mouseY < height / 2 + 205
   ) {
-    if (soundLoop.isPlaying) {
-      soundLoop.stop();
-    } else {
-      // start the loop
-      soundLoop.start();
-      parkAirplane();
-    }
+
   }
 }
 
-// example of a key pressed sound
+// key pressed sounds of sighing a-h
 function keyPressed() {
   if (key === "a") {
     sighASFX.play();
@@ -796,6 +827,7 @@ function moveMouseX() {
   }
 }
 
+// for airplane
 function handleInput() {
   if (keyIsDown(LEFT_ARROW)) {
     // Turn LEFT if the LEFT arrow is pressed
@@ -837,7 +869,7 @@ function move() {
   let vx = airplane.speed * cos(airplane.angle);
   let vy = airplane.speed * sin(airplane.angle);
 
-  // Move the circle with the calculated velocities
+  // Move the airplane with the calculated velocities
   airplane.x += vx;
   airplane.y += vy;
 }
@@ -862,6 +894,8 @@ function wrap() {
 
 function displayAirplane() {
   push();
+  airplane.x = airplane.x + random(-.5, .5);
+  airplane.y = airplane.y + random(-.5, .5);
   // translate to the airplane's centre
   translate(airplane.x, airplane.y);
   // Then rotate by its angle

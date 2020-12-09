@@ -1,20 +1,11 @@
 # Project 2 - Anything - CART 253
 
-**********************************************
-   _  /   /
-  |_ _   _  ._ o  _     _| / |_| o     _  ._
-  | (/_ (/_ |  | (/_   (_|   | | | \/ (/_ |
-
-**********************************************
-
 This is meant to be the opposite of doom scrolling.
 
 An endless simulation that takes
 you away to another place until such
 time you decide to return to your reality.
-Rewards for precision and focus.
-
-Also a digital clock.
+Rewards for precision and focus. Also a digital clock.
 
 I wanted to create something fun and functional
 that allowed me explore inheritace and other

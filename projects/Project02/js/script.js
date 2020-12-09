@@ -190,7 +190,7 @@ function draw() {
 
   if (state === `room`) {
     room();
-    // clock();
+    drawCursor();
   } else if (state === `leftWorld`) {
     leftWorld();
   } else if (state === `rightWorld`) {
@@ -227,6 +227,17 @@ function draw() {
   }
 }
 
+function drawCursor() {
+
+  push();
+  stroke(random(20, 100), 200);
+  line(mouseX - 5, mouseY, mouseX + 5, mouseY);
+  line(mouseX, mouseY - 5, mouseX, mouseY + 5);
+  noStroke();
+  // ellipse(mouseX, mouseY, 10);
+  pop();
+}
+
 function resetMouse() {
   mouseX = width / 2;
   mouseY = height / 2;
@@ -237,6 +248,7 @@ function centerAirplane() {
   airplane.x = width / 2 - 30;
   airplane.y = height / 2;
   airplane.angle = 0; // Facing right to start
+  landscapeY = height;
   pop();
 }
 

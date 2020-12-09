@@ -6,15 +6,14 @@ class Circle2 extends Shape {
     this.strokeWeightGrowth = 0;
     this.growSize = 6;
     this.colorChange = 2;
-    this.opacity = 200;
+    this.opacity = 100;
+    this.maxSize = 1000;
   }
 
   display() {
     super.display();
 
     push();
-    // strokeWeight(this.strokeWeight);
-    // noFill();
     noStroke();
     fill(this.fill.r, this.fill.g, this.fill.b, this.opacity);
     ellipse(this.x, this.y, this.size);

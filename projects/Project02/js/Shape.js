@@ -13,22 +13,20 @@ class Shape {
       g: random(0, 255),
       b: random(0, 255),
     };
+    this.vx = undefined;
+    this.vy = undefined;
     this.opacity = undefined;
     this.strokeWeight = undefined;
     this.strokeWeightGrowth = undefined;
     this.growSize = undefined;
     this.colorChange = undefined;
     this.growing = true;
+    this.maxSize = undefined;
 
     //Synth
     this.note = note;
     this.synth = new p5.PolySynth();
   }
-
-  // move() {
-  //   this.x += this.vx;
-  //   this.y += this.vy;
-  // }
 
   grow() {
     let randomValue = random();
@@ -48,7 +46,7 @@ class Shape {
       }
     }
 
-          if (this.size < -500 || this.size > height+500) {
+          if (this.size < -this.maxSize || this.size > height + this.maxSize) {
             stop();
             this.strokeWeight = 0;
             this.growing = false;

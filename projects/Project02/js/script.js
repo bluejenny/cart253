@@ -14,58 +14,58 @@
 // The opposite of doom scrolling
 // a endless scenario that takes
 // you away to other places
-// untill such time you are called
-// back to reality
+// untill such time you notice the time
+// and are called back to reality
 
 let state = `room`; // states are room, leftWorld, topWorld, rightWorld, bottomWorld
 
-//dark bckgrnd behind simulation
+//dark bckgrnd behind simulation to create fading background effect
 let bgDark = {
   r: 48,
   g: 65,
   b: 79,
 };
 
-//for the ice crystals
+//ice crystals
 let hex = {
   x: 0,
   y: 0,
   fill: 255,
   size: 10,
-  speed: .01
-}
+  speed: 0.01,
+};
 
-// the animated circles
+//the animated circles
 let circles = [];
 
-// snow falling animation
+//snow falling animation
 let snowflakes = [];
 let snowFalling = false;
 
-// from example https://editor.p5js.org/FugQueue/sketches/saW0wiHMy
+//confetti falling animation
 let confettis = [];
 let confettiFalling = false;
 
-
+//user controlled airplane
 let airplane = {
   x: 0,
   y: 0,
   size: 15,
   angle: 0, // Facing right to start
-  speed: 0, // Start out not moving
-  maxSpeed: 10, // Moving at 5 pixels per frame
+  speed: 0,
+  maxSpeed: 10,
   acceleration: 0.1, // How much velocity is gained when accelerating
   braking: -0.5, // How much velocity is lost when breaking
   drag: -0.05, // How much velocity is lost when neither accelerating nor braking
   vx: 0,
   vy: 0,
-  movementSpeed: 2
+  movementSpeed: 2,
 };
 
 let leftWorldBckgrnd = {
   r: 0,
   g: 0,
-  b: 0
+  b: 0,
 };
 
 // set to move landscape
@@ -74,9 +74,6 @@ let landsacpeVY = 1;
 
 // F-minor
 let notesF = [`F3`, `G3`, `Ab4`, `Bb4`, `C4`, `Db4`, `Eb4`, `F4`];
-
-// C-minor
-let notes3 = [60, 62, 64, 65, 67, 69, 71, 72]
 
 // random
 let notesD = [`D4`, `E4`, `F4`, `G4`, `A4`, `Bb5`, `C4`, `D4`];
@@ -92,7 +89,7 @@ let sighFSFX;
 let sighGSFX;
 let sighHSFX;
 let snowSFX;
-let subDrop;  // center airplane sound
+let subDrop; // center airplane sound
 let walkinparkSFX;
 let melodicloopSFX;
 let mysteriousSFX;
@@ -105,7 +102,6 @@ let clockOn = false;
 let synth;
 let soundLoop;
 let notePattern = [60, 72, 67, 64, 72, 80];
-let notePattern2 = [80, 82, 84, 87, 89, 92];
 
 let synthPoly;
 let interval;
@@ -134,12 +130,13 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  //load font
   clockFont = loadFont(`assets/digital-7.ttf`);
 
-  // set airplane to center of screen
+  //set airplane to center of screen
   centerAirplane();
 
-  // standard colors
+  //standard settings used throughout
   stroke(77, 87, 99);
   strokeWeight(1);
   noCursor();
@@ -161,29 +158,31 @@ function setup() {
   resetMouse();
 }
 
+// digital clock code used from https://editor.p5js.org/D_Snyder/sketches/Xtx2Zu9D5
 function clock() {
   push();
   noStroke();
   fill(255, 100);
   textFont(clockFont);
   textAlign(CENTER, CENTER);
-  textSize(width/4.25);
+  textSize(width / 4.25);
   let Hour = hour();
   let min = minute();
-  let secs = second()
-  let noon = Hour >= 12? " PM" : " AM"
-  if(min < 10)
-    min = "0"+min
-  Hour%=12
-  text(Hour+":"+min+":"+secs+noon, width/2, height/2);
+  let secs = second();
+  let noon = Hour >= 12 ? " PM" : " AM";
+  if (min < 10) min = "0" + min;
+  Hour %= 12;
+  text(Hour + ":" + min + ":" + secs + noon, width / 2, height / 2);
   pop();
 }
 
+//create a different background for leftWorld
 function setleftWorldBckgrnd() {
   leftWorldBckgrnd.r = random(0, 256);
   leftWorldBckgrnd.g = random(0, 256);
   leftWorldBckgrnd.b = random(0, 256);
 }
+
 
 function draw() {
   background(bgDark.r, bgDark.g, bgDark.b);
@@ -202,16 +201,16 @@ function draw() {
   }
 
   // check to see if someone is clicking on a marker
-  if (state !== 'room') {
-  displayMarkers();
+  if (state !== "room") {
+    displayMarkers();
   }
 
   if (clockOn === true) {
-  clock();
+    clock();
   }
 
   if (mouseIsPressed && state !== `room`) {
-  iceCrystals();
+    iceCrystals();
   }
 
   // airplane
@@ -220,6 +219,7 @@ function draw() {
   wrap();
   displayAirplane();
 
+  //circle animation
   for (let i = 0; i < circles.length; i++) {
     let circle = circles[i];
     circle.grow();
@@ -227,14 +227,13 @@ function draw() {
   }
 }
 
+// cursor for room state only
 function drawCursor() {
-
   push();
   stroke(random(20, 100), 200);
   line(mouseX - 5, mouseY, mouseX + 5, mouseY);
   line(mouseX, mouseY - 5, mouseX, mouseY + 5);
   noStroke();
-  // ellipse(mouseX, mouseY, 10);
   pop();
 }
 
@@ -252,6 +251,7 @@ function centerAirplane() {
   pop();
 }
 
+//for rooms page but can be set through x and y to any area of the screen
 function drawController(x, y) {
   push();
   noStroke();
@@ -275,7 +275,7 @@ function room() {
   bgDark.g = 65;
   bgDark.b = 79;
 
-  //stop all sound and graphics
+  //stop all sound and turn graphics off
   clearInterval(interval);
   interval = undefined;
   snowSFX.stop();
@@ -319,7 +319,6 @@ function bottomWorld() {
 
 // creates effect of canvas getting lighter or darker
 // based on mouseY position, 0 = light, height = dark
-
 function backgroundFade(r, g, b) {
   let m = map(mouseY, 0, height, 255, 0);
   fill(r, g, b, m);
@@ -344,7 +343,12 @@ function drawRoom() {
 
   // top and bottom horizonatal line
   line(width / 2 - width / 3, 100, width / 2 + width / 3, 100);
-  line(width / 2 - width / 3, height - 150, width / 2 + width / 3, height - 150);
+  line(
+    width / 2 - width / 3,
+    height - 150,
+    width / 2 + width / 3,
+    height - 150
+  );
 
   // left and right vertical line
   line(width / 2 - width / 3, 100, width / 2 - width / 3, height - 150);
@@ -353,8 +357,10 @@ function drawRoom() {
   pop();
 }
 
+// improved this code from project 1
 function drawSun() {
   push();
+
   stroke(random(200, 235));
   ellipseMode(CENTER);
 
@@ -362,7 +368,7 @@ function drawSun() {
   let pointAngle = 360 / points; //angle between points
   let radius = width; //length of each line from centre to edge of circle
 
-  //check to see if on mobile screen (vertical)
+  //check to see if screen is vertical and adjust
   if (width / 2 < height / 2) {
     radius = height / 2;
   }
@@ -372,18 +378,19 @@ function drawSun() {
     let y = sin(radians(angle)) * radius;
     line(mouseX, mouseY, mouseX + x, mouseY + y);
   }
+
   pop();
 }
 
 function checkSnowFalling() {
   if (snowFalling) {
-  fallingSnow();
+    fallingSnow();
   }
 }
 
 function checkConfettiFalling() {
   if (confettiFalling) {
-  fallingConfetti();
+    fallingConfetti();
   }
 }
 
@@ -397,25 +404,60 @@ function displayLandscapeLeft() {
   stroke(255, opacity);
 
   // mtns back
-  triangle(mouseX - width / 8, (landscapeY) / 3, 0, landscapeY / 3 - 200, 0, landscapeY);
-  triangle(mouseX + width / 8, (landscapeY) / 3, width, landscapeY / 3 - 200, width, landscapeY);
+  triangle(
+    mouseX - width / 8,
+    landscapeY / 3,
+    0,
+    landscapeY / 3 - 200,
+    0,
+    landscapeY
+  );
+  triangle(
+    mouseX + width / 8,
+    landscapeY / 3,
+    width,
+    landscapeY / 3 - 200,
+    width,
+    landscapeY
+  );
 
   // mtns front
   fill(87, 97, 109, opacity);
-  triangle(mouseX + 30, (landscapeY) / 3, 0, landscapeY / 3 - 30, 0, landscapeY - 200);
-  triangle(mouseX - 30, (landscapeY) / 3, width, landscapeY / 3 - 50, width, landscapeY - 200);
+  triangle(
+    mouseX + 30,
+    landscapeY / 3,
+    0,
+    landscapeY / 3 - 30,
+    0,
+    landscapeY - 200
+  );
+  triangle(
+    mouseX - 30,
+    landscapeY / 3,
+    width,
+    landscapeY / 3 - 50,
+    width,
+    landscapeY - 200
+  );
 
   fill(77, 87, 99, opacity);
-  triangle(mouseX - 10, (landscapeY) / 3, 0, landscapeY / 3, 0, landscapeY-300);
-  triangle(mouseX + 10, (landscapeY) / 3, width, landscapeY / 3, width, landscapeY-300);
+  triangle(mouseX - 10, landscapeY / 3, 0, landscapeY / 3, 0, landscapeY - 300);
+  triangle(
+    mouseX + 10,
+    landscapeY / 3,
+    width,
+    landscapeY / 3,
+    width,
+    landscapeY - 300
+  );
 
   //land
-
   fill(142, 163, 180, 220);
-  rect(0, 0, width, (landscapeY) / 3);
+  rect(0, 0, width, landscapeY / 3);
 
   checkSnowFalling();
   checkConfettiFalling();
+
   pop();
 }
 
@@ -435,21 +477,76 @@ function displayLandscape() {
   // mtns back
   push();
   fill(77, 87, 99);
-  triangle(mouseX - width / 8, (2 * landscapeY) / 3 + 20, 0, landscapeY / 3 - 100, 0, landscapeY);
-  triangle(mouseX + width / 8, (2 * landscapeY) / 3 + 20, width, landscapeY / 3 - 100, width, landscapeY);
+  triangle(
+    mouseX - width / 8,
+    (2 * landscapeY) / 3 + 20,
+    0,
+    landscapeY / 3 - 100,
+    0,
+    landscapeY
+  );
+  triangle(
+    mouseX + width / 8,
+    (2 * landscapeY) / 3 + 20,
+    width,
+    landscapeY / 3 - 100,
+    width,
+    landscapeY
+  );
   pop();
-  triangle(mouseX - width / 8, (2 * landscapeY) / 3 + 20, 0, landscapeY / 3 - 100, 0, landscapeY);
-  triangle(mouseX + width / 8, (2 * landscapeY) / 3 + 20, width, landscapeY / 3 - 100, width, landscapeY);
+  triangle(
+    mouseX - width / 8,
+    (2 * landscapeY) / 3 + 20,
+    0,
+    landscapeY / 3 - 100,
+    0,
+    landscapeY
+  );
+  triangle(
+    mouseX + width / 8,
+    (2 * landscapeY) / 3 + 20,
+    width,
+    landscapeY / 3 - 100,
+    width,
+    landscapeY
+  );
 
   // mtns front
   fill(87, 97, 109);
-  triangle(mouseX + 30, (2 * landscapeY) / 3, 0, landscapeY / 2 - 30, 0, landscapeY - 100);
-  triangle(mouseX - 30, (2 * landscapeY) / 3, width, landscapeY / 2 - 50, width, landscapeY - 100);
-
+  triangle(
+    mouseX + 30,
+    (2 * landscapeY) / 3,
+    0,
+    landscapeY / 2 - 30,
+    0,
+    landscapeY - 100
+  );
+  triangle(
+    mouseX - 30,
+    (2 * landscapeY) / 3,
+    width,
+    landscapeY / 2 - 50,
+    width,
+    landscapeY - 100
+  );
 
   fill(97, 107, 119);
-  triangle(mouseX - 10, (2 * landscapeY) / 3, 0, landscapeY / 2 + 55, 0, landscapeY);
-  triangle(mouseX + 10, (2 * landscapeY) / 3, width, landscapeY / 2 + 55, width, landscapeY);
+  triangle(
+    mouseX - 10,
+    (2 * landscapeY) / 3,
+    0,
+    landscapeY / 2 + 55,
+    0,
+    landscapeY
+  );
+  triangle(
+    mouseX + 10,
+    (2 * landscapeY) / 3,
+    width,
+    landscapeY / 2 + 55,
+    width,
+    landscapeY
+  );
 
   //land
   fill(142, 163, 180, 220);
@@ -457,6 +554,7 @@ function displayLandscape() {
 
   checkSnowFalling();
   checkConfettiFalling();
+
   pop();
 }
 
@@ -478,14 +576,8 @@ function displayMarkers() {
   line(width / 6, height / 2 - 205, width / 6, height / 2 - 195);
 
   //top-right
-  line(
-    (width / 6) * 5 - 5,
-    height / 2 - 200,
-    (width / 6) * 5 + 5,
-    height / 2 - 200
-  );
+  line((width / 6) * 5 - 5, height / 2 - 200, (width / 6) * 5 + 5, height / 2 - 200);
   line((width / 6) * 5, height / 2 - 205, (width / 6) * 5, height / 2 - 195);
-
 
   // middle left
   line(width / 2 - 5, height / 2, width / 2 + 5, height / 2);
@@ -499,7 +591,6 @@ function displayMarkers() {
   line((width / 6) * 5 - 5, height / 2, (width / 6) * 5 + 5, height / 2);
   line((width / 6) * 5, height / 2 - 5, (width / 6) * 5, height / 2 + 5);
 
-
   // bottom left
   line(width / 2 - 5, height / 2 + 200, width / 2 + 5, height / 2 + 200);
   line(width / 2, height / 2 + 205, width / 2, height / 2 + 195);
@@ -511,12 +602,9 @@ function displayMarkers() {
   // bottom right
   line((width / 6) * 5 - 5, height / 2 + 200, (width / 6) * 5 + 5, height / 2 + 200);
   line((width / 6) * 5, height / 2 + 205, (width / 6) * 5, height / 2 + 195);
+
   pop();
 }
-
-// function checkMarkers() {
-//
-// }
 
 function onSoundLoop(timeFromNow) {
   let noteIndex = (soundLoop.iterations - 1) % notePattern.length;
@@ -524,108 +612,97 @@ function onSoundLoop(timeFromNow) {
   synth.play(note, 0.025, timeFromNow);
 }
 
-// playRandomNote() plays a random note
+// plays a random note
 function playRandomNote() {
-  // Chose a random note
   let note = random(notesD);
-  // Play it
   synth.play(note, 1, 0, 1);
 }
 
-
+//inherited from Shape
 function createCircle1(x, y) {
   let note = random(notesD);
   let circle = new Circle1(x, y, note);
   circles.push(circle);
 }
 
+//inherited from Shape
 function createCircle2(x, y) {
   let note = random(notesF);
   let circle = new Circle2(x, y, note);
   circles.push(circle);
 }
 
+//inherited from Shape
 function createCircle3(x, y) {
-  let note = random(notes3);
+  let note = random(notesF);
   let circle = new Circle3(x, y, note);
   circles.push(circle);
 }
 
 function fallingConfetti() {
-
   push();
   noStroke();
-  // fill(240, 100);
 
-  // draw falling snow
-   let t = frameCount / 60; // update time
+  let t = frameCount / 60; // update time
 
-   //create a random number of snowflakes each frame
-   for (let i = 0; i < random(5); i++) {
-     confettis.push(new confetti()); // append snowflake object
-   }
+  for (let i = 0; i < random(5); i++) {
+    confettis.push(new confetti());
+  }
 
-   //loop through snowflakes with a for..of loop
-    for (let confetti of confettis) {
-      confetti.update(t); // update snowflake position
-      confetti.display(); // draw snowflake
-    }
+  for (let confetti of confettis) {
+    confetti.update(t); // update snowflake position
+    confetti.display(); // draw snowflake
+  }
 
-    pop();
+  pop();
 }
 
 function fallingSnow() {
-
   push();
   noStroke();
   fill(240, 100);
 
   // draw falling snow
-   let t = frameCount / 60; // update time
+  let t = frameCount / 60; // update time
 
-   //create a random number of snowflakes each frame
-   for (let i = 0; i < random(1); i++) {
-     snowflakes.push(new snowflake()); // append snowflake object
-   }
+  //create a random number of snowflakes each frame
+  for (let i = 0; i < random(1); i++) {
+    snowflakes.push(new snowflake()); // append snowflake object
+  }
 
-   //loop through snowflakes with a for..of loop
-    for (let flake of snowflakes) {
-      flake.update(t); // update snowflake position
-      flake.display(); // draw snowflake
-    }
+  //loop through snowflakes with a for..of loop
+  for (let flake of snowflakes) {
+    flake.update(t); // update snowflake position
+    flake.display(); // draw snowflake
+  }
 
-    pop();
+  pop();
 }
 
 function confetti() {
-  // initialize coordinates
+  // code from //from example https://editor.p5js.org/FugQueue/sketches/saW0wiHMy
+
   this.posX = 0;
   this.posY = random(-50, 0);
   this.initialangle = random(0, 2 * PI);
   this.size = random(2, 10);
-
-  // radius of snowflake spiral
-  // chosen so the snowflakes are uniformly spread out in area
   this.radius = sqrt(random(pow(width / 2, 2)));
   this.color = color(random(255), random(255), random(255));
 
-  this.update = function(time) {
-    // x position follows a circle
-    let w = 0.6; // angular speed
+  this.update = function (time) {
+    let w = 0.6;
     let angle = w * time + this.initialangle;
     this.posX = width / 2 + this.radius * sin(angle);
-
-    // different size snowflakes fall at slightly different y speeds
     this.posY += pow(this.size, 0.5);
 
-    // delete snowflake if past end of screen
+    // delete if past end of screen
     if (this.posY > height) {
       let index = confettis.indexOf(this);
       confettis.splice(index, 1);
     }
   };
 
-  this.display = function() {
+  this.display = function () {
     fill(this.color);
     ellipse(this.posX, this.posY, this.size);
   };
@@ -644,7 +721,7 @@ function snowflake() {
   // chosen so the snowflakes are uniformly spread out in area
   this.radius = sqrt(random(pow(width / 2, 2)));
 
-  this.update = function(time) {
+  this.update = function (time) {
     // x position follows a circle
     let w = 0.6; // angular speed
     let angle = w * time + this.initialangle;
@@ -660,27 +737,23 @@ function snowflake() {
     }
   };
 
-  this.display = function() {
+  this.display = function () {
     ellipse(this.posX, this.posY, this.size);
   };
 }
 
-//draws a hexagon
-function hexagon (x, y, r) {
-
-	push();
+//draws a hexagon for iceCrystals()
+function hexagon(x, y, r) {
+  push();
   translate(x, y);
   beginShape();
-	for (var i = 0; i < 7; i++) {
-
-		let x = r * cos(TWO_PI/6 * i + TWO_PI/12);
-		let y = r * sin(TWO_PI/6 * i + TWO_PI/12);
-		vertex(x, y);
-
-	}
-	endShape();
+  for (var i = 0; i < 7; i++) {
+    let x = r * cos((TWO_PI / 6) * i + TWO_PI / 12);
+    let y = r * sin((TWO_PI / 6) * i + TWO_PI / 12);
+    vertex(x, y);
+  }
+  endShape();
   pop();
-
 }
 
 function iceCrystals() {
@@ -702,25 +775,17 @@ function iceCrystals() {
     hex.x = random(0, mouseX);
     hex.y = random(height, mouseY);
     hexagon(hex.x, hex.y, hex.size);
-
-    //circle top left
-    hex.x = random(0, mouseX);
-    hex.y = random(0, mouseY);
-    hexagon(hex.x, hex.y, hex.size);
-
-    //circle bottom right
-    hex.x = random(mouseX, width);
-    hex.y = random(height, mouseY);
-    hexagon(hex.x, hex.y, hex.size);
   }
   pop();
 }
 
+// used by middle right marker setting
 function changeBckgrnd() {
   bgDark.r = random(0, 255);
   bgDark.g = random(0, 255);
   bgDark.b = random(0, 255);
 }
+
 
 function mousePressed() {
   if (state !== `room`) {
@@ -732,21 +797,20 @@ function mousePressed() {
       createCircle3(mouseX, mouseY);
     } else {
       let randomValue = random();
-      if (randomValue < .33) {
+      if (randomValue < 0.33) {
         createCircle1(mouseX, mouseY);
-      } else if (randomValue > .66) {
+      } else if (randomValue > 0.66) {
         createCircle2(mouseX, mouseY);
-        }
-        else {
+      } else {
         createCircle3(mouseX, mouseY);
-        }
       }
+    }
   }
+
+  userStartAudio();
 
   //first row
   // top left marker - start and stop soundtrack
-
-  userStartAudio();
 
   if (
     mouseX >= width / 6 - 5 &&
@@ -762,16 +826,13 @@ function mousePressed() {
       loopIsPlaying = false;
     } else {
       if (state === `rightWorld`) {
-      walkinparkSFX.loop();
-    }
-      else if (state === `leftWorld`) {
-      melodicloopSFX.loop();
-      }
-      else if (state === `topWorld`) {
-      mysteriousSFX.loop();
-      }
-      else if (state === `bottomWorld`) {
-      acidloopSFX.loop();
+        walkinparkSFX.loop();
+      } else if (state === `leftWorld`) {
+        melodicloopSFX.loop();
+      } else if (state === `topWorld`) {
+        mysteriousSFX.loop();
+      } else if (state === `bottomWorld`) {
+        acidloopSFX.loop();
       }
       loopIsPlaying = true;
     }
@@ -787,11 +848,10 @@ function mousePressed() {
   ) {
     sighGSFX.play();
     if (!snowFalling) {
-    snowFalling = true;
-  } else {
-    snowFalling = false;
-  }
-
+      snowFalling = true;
+    } else {
+      snowFalling = false;
+    }
   }
 
   // right top marker - start wind blowing
@@ -802,13 +862,13 @@ function mousePressed() {
     mouseY > height / 2 - 205 &&
     mouseY < height / 2 - 195
   ) {
-  if (loopIsPlaying) {
-    windSFX.stop();
-    loopIsPlaying = false;
-  } else {
-    windSFX.loop();
-    loopIsPlaying = true;
-  }
+    if (loopIsPlaying) {
+      windSFX.stop();
+      loopIsPlaying = false;
+    } else {
+      windSFX.loop();
+      loopIsPlaying = true;
+    }
   }
 
   //middle row
@@ -822,9 +882,8 @@ function mousePressed() {
   ) {
     sighBSFX.play();
     if (state !== `bottomWorld`) {
-    createCircle3(mouseX, mouseY);
-    }
-    else {
+      createCircle3(mouseX, mouseY);
+    } else {
       createCircle1(mouseX, mouseY);
       createCircle2(mouseX, mouseY);
     }
@@ -837,13 +896,12 @@ function mousePressed() {
     mouseX <= width / 2 + 5 &&
     mouseY > height / 2 - 5 &&
     mouseY < height / 2 + 5
-  )  {
+  ) {
     if (soundLoop.isPlaying) {
       soundLoop.stop();
     } else {
       // start the loop
       soundLoop.start();
-      // subDrop.loop();
       centerAirplane();
     }
     if (state === `bottomWorld`) {
@@ -880,7 +938,7 @@ function mousePressed() {
     }
   }
 
-  // bottom middle marker - play computer sound and ...
+  // bottom middle marker - play computer sound and confetti
 
   if (
     mouseX >= width / 2 - 5 &&
@@ -890,7 +948,6 @@ function mousePressed() {
   ) {
     // check to see if playing
     if (interval === undefined) {
-      // Start interval, calling playRandomNote every 100 milliseconds
       interval = setInterval(playRandomNote, 200);
       confettiFalling = true;
     } else {
@@ -901,7 +958,7 @@ function mousePressed() {
     }
   }
 
-  // bottom right marker -
+  // bottom right marker - digital clock
 
   if (
     mouseX >= (width / 6) * 5 - 5 &&
@@ -910,15 +967,15 @@ function mousePressed() {
     mouseY < height / 2 + 205
   ) {
     if (clockOn === true) {
-      clockOn = false
+      clockOn = false;
     } else {
-      clockOn = true
+      clockOn = true;
       sighHSFX.play();
     }
   }
 }
 
-// key pressed sounds of sighing a-h
+// key pressed sounds of sighing a-h, hidden sounds
 function keyPressed() {
   if (key === "a") {
     sighASFX.play();
@@ -944,6 +1001,7 @@ function keyPressed() {
   if (key === "h") {
     sighHSFX.play();
   }
+  //return to start screen
   if (keyCode === RETURN) {
     state = `room`;
     centerAirplane();
@@ -978,15 +1036,15 @@ function handleInput() {
     airplane.speed += airplane.acceleration;
     airplane.speed = constrain(airplane.speed, 0, airplane.maxSpeed);
     if (state === `rightWorld`) {
-    moveMouseX();
+      moveMouseX();
     }
     if (state === `topWorld`) {
-    landscapeY += landsacpeVY;
-    mouseY += landsacpeVY;
+      landscapeY += landsacpeVY;
+      mouseY += landsacpeVY;
     }
     if (state === `bottomWorld`) {
-    landscapeY += -landsacpeVY;
-    mouseY += -landsacpeVY;
+      landscapeY += -landsacpeVY;
+      mouseY += -landsacpeVY;
     }
   }
   // Brake if the DOWN ARROW is pressed
@@ -1001,7 +1059,7 @@ function handleInput() {
 }
 
 function move() {
-  // The magical formula!
+  // The magical formula! thanks Pippin!
   let vx = airplane.speed * cos(airplane.angle);
   let vy = airplane.speed * sin(airplane.angle);
 
@@ -1030,8 +1088,8 @@ function wrap() {
 
 function displayAirplane() {
   push();
-  airplane.x = airplane.x + random(-.5, .5);
-  airplane.y = airplane.y + random(-.5, .5);
+  airplane.x = airplane.x + random(-0.5, 0.5);
+  airplane.y = airplane.y + random(-0.5, 0.5);
   // translate to the airplane's centre
   translate(airplane.x, airplane.y);
   // Then rotate by its angle

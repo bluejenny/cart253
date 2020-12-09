@@ -33,33 +33,31 @@ class Shape {
     if (this.growing) {
       this.size += this.growSize;
       this.strokeWeight += this.strokeWeightGrowth;
-      if (randomValue < .33) {
-      this.stroke.r += this.colorChange;
-      this.fill.r += -this.colorChange;
-    } else if (randomValue > .66) {
-      this.stroke.g += this.colorChange;
-      this.fill.g += -this.colorChange;
-      }
-      else {
-      this.stroke.b += this.colorChange;
-      this.fill.b += -this.colorChange;
+      if (randomValue < 0.33) {
+        this.stroke.r += this.colorChange;
+        this.fill.r += -this.colorChange;
+      } else if (randomValue > 0.66) {
+        this.stroke.g += this.colorChange;
+        this.fill.g += -this.colorChange;
+      } else {
+        this.stroke.b += this.colorChange;
+        this.fill.b += -this.colorChange;
       }
     }
 
-          if (this.size < -this.maxSize || this.size > height + this.maxSize) {
-            stop();
-            this.strokeWeight = 0;
-            this.growing = false;
-            this.opacity = 0;
-          } else {
-            this.playNote();
-          }
+    if (this.size < -this.maxSize || this.size > height + this.maxSize) {
+      stop();
+      this.strokeWeight = 0;
+      this.growing = false;
+      this.opacity = 0;
+    } else {
+      this.playNote();
     }
+  }
 
   playNote() {
     this.synth.play(this.note, 0.1, 0, 0.1);
   }
 
-  display() {
-  }
+  display() {}
 }

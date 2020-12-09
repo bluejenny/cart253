@@ -1,3 +1,22 @@
-# Template p5 project
+# Project 2 - Anything - CART 253
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+**********************************************
+   _  /   /
+  |_ _   _  ._ o  _     _| / |_| o     _  ._
+  | (/_ (/_ |  | (/_   (_|   | | | \/ (/_ |
+
+**********************************************
+
+This is meant to be the opposite of doom scrolling.
+
+An endless simulation that takes
+you away to another place until such
+time you decide to return to your reality.
+Rewards for precision and focus.
+
+Also a digital clock.
+
+I wanted to create something fun and functional
+that allowed me explore inheritace and other
+coding concepts from the course, plus keep me distracted
+from the ever present doom of our reality.
